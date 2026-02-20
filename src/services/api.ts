@@ -45,8 +45,23 @@ export const crudApi = {
   groups: base('groups'),
   customers: base('customers'),
   comboMeals: base('combo-meals'),
-  carts: base('carts'),
+  carts: {
+    ...base('carts'),
+    addItem: (cartId: number, data: { menu_item_id: number; quantity: number }) =>
+      axios.post(`/v1/carts/${cartId}/items`, data),
+    removeItem: (cartId: number, cartItemId: number) =>
+      axios.delete(`/v1/carts/${cartId}/items/${cartItemId}`),
+  },
+  checkout: (data: {
+    cart_id: number;
+    order_type_id: number;
+    customer_id?: number;
+    store_id?: number;
+    address_id?: number;
+    zone_id?: number;
+  }) => axios.post('/v1/checkout', data),
   orders: base('orders'),
+  kitchenTickets: base('kitchen-tickets'),
   stockMovements: base('stock-movements'),
   stockBatches: base('stock-batches'),
   reservations: base('reservations'),

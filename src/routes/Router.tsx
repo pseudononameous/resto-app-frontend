@@ -17,11 +17,13 @@ const CollectionsPage = lazy(() => import('@pages/products/CollectionsPage'));
 const InventoryPage = lazy(() => import('@pages/products/InventoryPage'));
 const ProductDetailPage = lazy(() => import('@pages/products/ProductDetailPage'));
 const MenuItemsPage = lazy(() => import('@pages/crud/MenuItemsPage'));
-const CartsPage = lazy(() => import('@pages/crud/CartsPage'));
+const MenuItemDetailPage = lazy(() => import('@pages/menu/MenuItemDetailPage'));
 const OrdersPage = lazy(() => import('@pages/crud/OrdersPage'));
 const CustomersPage = lazy(() => import('@pages/crud/CustomersPage'));
 const DeliveriesPage = lazy(() => import('@pages/crud/DeliveriesPage'));
 const ReservationsPage = lazy(() => import('@pages/crud/ReservationsPage'));
+const KioskPage = lazy(() => import('@pages/kiosk/KioskPage'));
+const KitchenTicketsPage = lazy(() => import('@pages/crud/KitchenTicketsPage'));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -41,11 +43,13 @@ const router = createBrowserRouter(
           <Route path="/dashboard/products/inventory" element={<InventoryPage />} />
           <Route path="/dashboard/products/:id" element={<ProductDetailPage />} />
           <Route path="/dashboard/menu-items" element={<MenuItemsPage />} />
-          <Route path="/dashboard/carts" element={<CartsPage />} />
+          <Route path="/dashboard/menu-items/:id" element={<MenuItemDetailPage />} />
           <Route path="/dashboard/orders" element={<OrdersPage />} />
           <Route path="/dashboard/customers" element={<CustomersPage />} />
           <Route path="/dashboard/deliveries" element={<DeliveriesPage />} />
           <Route path="/dashboard/reservations" element={<ReservationsPage />} />
+          <Route path="/dashboard/kiosk" element={<KioskPage />} />
+          <Route path="/dashboard/kitchen-tickets" element={<KitchenTicketsPage />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

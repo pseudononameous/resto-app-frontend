@@ -5,7 +5,6 @@ import StockBatchesPage from "./StockBatchesPage";
 import StockMovementsPage from "./StockMovementsPage";
 import WasteLogsPage from "./WasteLogsPage";
 import MenuItemsPage from "./MenuItemsPage";
-import CartsPage from "./CartsPage";
 import OrdersPage from "./OrdersPage";
 import CustomersPage from "./CustomersPage";
 import DeliveriesPage from "./DeliveriesPage";
@@ -17,7 +16,6 @@ const SECTIONS = [
   { key: "stock-movements", Component: StockMovementsPage },
   { key: "waste-logs", Component: WasteLogsPage },
   { key: "menu-items", Component: MenuItemsPage },
-  { key: "carts", Component: CartsPage },
   { key: "orders", Component: OrdersPage },
   { key: "customers", Component: CustomersPage },
   { key: "deliveries", Component: DeliveriesPage },

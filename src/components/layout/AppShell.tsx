@@ -1,7 +1,7 @@
 import { AppShell as MantineAppShell, Burger, Group, Stack, NavLink, UnstyledButton, Box, Text, ThemeIcon, Menu, Button, Tooltip, Select, Paper } from "@mantine/core";
 import { useDisclosure, useViewportSize } from "@mantine/hooks";
 import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
-import { IconLogout, IconUser, IconLayoutDashboard, IconBooks, IconCode, IconMapPin, IconPackage, IconMenu2, IconShoppingBag, IconClipboardList, IconUsers, IconTruckDelivery, IconCalendar, IconCategory, IconStack2 } from "@tabler/icons-react";
+import { IconLogout, IconUser, IconLayoutDashboard, IconBooks, IconCode, IconMapPin, IconPackage, IconMenu2, IconClipboardList, IconUsers, IconTruckDelivery, IconCalendar, IconCategory, IconStack2, IconDeviceDesktop, IconTicket } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { useApiHelp } from "@contexts/ApiHelpContext";
 import { useStoreContext, StoreProvider } from "@contexts/StoreContext";
@@ -21,8 +21,9 @@ const NAV = [
     ],
   },
   { to: "/dashboard/menu-items", label: "Menu Items", icon: IconMenu2 },
-  { to: "/dashboard/carts", label: "Carts", icon: IconShoppingBag },
+  { to: "/dashboard/kiosk", label: "Kiosk", icon: IconDeviceDesktop },
   { to: "/dashboard/orders", label: "Orders", icon: IconClipboardList },
+  { to: "/dashboard/kitchen-tickets", label: "Kitchen tickets", icon: IconTicket },
   { to: "/dashboard/customers", label: "Customers", icon: IconUsers },
   { to: "/dashboard/deliveries", label: "Deliveries", icon: IconTruckDelivery },
   { to: "/dashboard/reservations", label: "Reservations", icon: IconCalendar },

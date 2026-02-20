@@ -40,7 +40,6 @@ export default function DashboardPage() {
           <Button component={Link} to="/dashboard/groups" variant="light">Groups</Button>
           <Button component={Link} to="/dashboard/customers" variant="light">Customers</Button>
           <Button component={Link} to="/dashboard/combo-meals" variant="light">Combo Meals</Button>
-          <Button component={Link} to="/dashboard/carts" variant="light">Carts</Button>
           <Button component={Link} to="/dashboard/orders" variant="light">Orders</Button>
           <Button component={Link} to="/dashboard/stock-movements" variant="light">Stock Movements</Button>
           <Button component={Link} to="/dashboard/stock-batches" variant="light">Stock Batches</Button>
