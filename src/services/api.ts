@@ -33,7 +33,11 @@ export const crudApi = {
   brands: base('brands'),
   categories: base('categories'),
   stores: base('stores'),
-  products: base('products'),
+  products: {
+    ...base('products'),
+    import: (formData: FormData) =>
+      axios.post('/v1/products/import', formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  },
   menuCategories: base('menu-categories'),
   menuItems: base('menu-items'),
   deliveryZones: base('delivery-zones'),

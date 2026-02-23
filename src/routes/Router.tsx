@@ -13,9 +13,9 @@ const ResetPasswordPage = lazy(() => import('@pages/auth/ResetPasswordPage'));
 const DashboardPage = lazy(() => import('@pages/dashboard/DashboardPage'));
 const LibrariesPage = lazy(() => import('@pages/crud/LibrariesPage'));
 const ProductsPage = lazy(() => import('@pages/crud/ProductsPage'));
-const StockBatchesPage = lazy(() => import('@pages/crud/StockBatchesPage'));
-const StockMovementsPage = lazy(() => import('@pages/crud/StockMovementsPage'));
-const WasteLogsPage = lazy(() => import('@pages/crud/WasteLogsPage'));
+const CollectionsPage = lazy(() => import('@pages/products/CollectionsPage'));
+const InventoryPage = lazy(() => import('@pages/products/InventoryPage'));
+const ProductDetailPage = lazy(() => import('@pages/products/ProductDetailPage'));
 const MenuItemsPage = lazy(() => import('@pages/crud/MenuItemsPage'));
 const CartsPage = lazy(() => import('@pages/crud/CartsPage'));
 const OrdersPage = lazy(() => import('@pages/crud/OrdersPage'));
@@ -36,9 +36,10 @@ const router = createBrowserRouter(
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/dashboard/libraries" element={<LibrariesPage />} />
           <Route path="/dashboard/products" element={<ProductsPage />} />
-          <Route path="/dashboard/stock-batches" element={<StockBatchesPage />} />
-          <Route path="/dashboard/stock-movements" element={<StockMovementsPage />} />
-          <Route path="/dashboard/waste-logs" element={<WasteLogsPage />} />
+          <Route path="/dashboard/products/collections" element={<CollectionsPage />} />
+          <Route path="/dashboard/products/collections/:categoryId" element={<CollectionsPage />} />
+          <Route path="/dashboard/products/inventory" element={<InventoryPage />} />
+          <Route path="/dashboard/products/:id" element={<ProductDetailPage />} />
           <Route path="/dashboard/menu-items" element={<MenuItemsPage />} />
           <Route path="/dashboard/carts" element={<CartsPage />} />
           <Route path="/dashboard/orders" element={<OrdersPage />} />

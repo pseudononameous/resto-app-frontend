@@ -1,5 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Button, Paper, Table, Group, ActionIcon, Modal, TextInput, Checkbox, Stack, Title, Select, NumberInput } from '@mantine/core';
+import { Button, Paper, Table, Group, ActionIcon, Modal, TextInput, Checkbox, Stack, Title, Select, NumberInput, Badge } from '@mantine/core';
+import { LibBadge } from '@components/ui/LibBadge';
+import { LibBadge } from '@components/ui/LibBadge';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconEdit, IconTrash, IconPlus } from '@tabler/icons-react';
@@ -79,16 +81,19 @@ export default function ProductsPage() {
       </Group>
       <Table striped highlightOnHover>
         <Table.Thead>
-          <Table.Tr><Table.Th>Name</Table.Th><Table.Th>SKU</Table.Th><Table.Th>Price</Table.Th><Table.Th>Qty</Table.Th><Table.Th>Availability</Table.Th><Table.Th>Actions</Table.Th></Table.Tr>
+          <Table.Tr><Table.Th>Name</Table.Th><Table.Th>SKU</Table.Th><Table.Th>Category</Table.Th><Table.Th>Brand</Table.Th><Table.Th>Store</Table.Th><Table.Th>Price</Table.Th><Table.Th>Qty</Table.Th><Table.Th>Availability</Table.Th><Table.Th>Actions</Table.Th></Table.Tr>
         </Table.Thead>
         <Table.Tbody>
           {list.map((row) => (
             <Table.Tr key={row.id}>
               <Table.Td>{row.name}</Table.Td>
               <Table.Td>{row.sku ?? '-'}</Table.Td>
+              <Table.Td><LibBadge value={row.category?.name} /></Table.Td>
+              <Table.Td><LibBadge value={row.brand?.name} /></Table.Td>
+              <Table.Td><LibBadge value={row.store?.name} /></Table.Td>
               <Table.Td>{row.price != null ? row.price : '-'}</Table.Td>
               <Table.Td>{row.qty ?? 0}</Table.Td>
-              <Table.Td>{row.availability ? 'Yes' : 'No'}</Table.Td>
+              <Table.Td><Badge size="sm" variant="light" color={row.availability ? 'green' : 'gray'}>{row.availability ? 'Yes' : 'No'}</Badge></Table.Td>
               <Table.Td>
                 <Group gap="xs">
                   <ActionIcon variant="subtle" onClick={() => openEdit(row)}><IconEdit size={16} /></ActionIcon>

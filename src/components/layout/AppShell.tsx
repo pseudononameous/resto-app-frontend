@@ -1,7 +1,7 @@
 import { AppShell as MantineAppShell, Burger, Group, Stack, NavLink, UnstyledButton, Box, Text, ThemeIcon, Menu, Button, Tooltip, Select, Paper } from "@mantine/core";
 import { useDisclosure, useViewportSize } from "@mantine/hooks";
 import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
-import { IconLogout, IconUser, IconLayoutDashboard, IconBooks, IconCode, IconMapPin, IconPackage, IconMenu2, IconShoppingBag, IconClipboardList, IconUsers, IconTruckDelivery, IconCalendar, IconTrash } from "@tabler/icons-react";
+import { IconLogout, IconUser, IconLayoutDashboard, IconBooks, IconCode, IconMapPin, IconPackage, IconMenu2, IconShoppingBag, IconClipboardList, IconUsers, IconTruckDelivery, IconCalendar, IconCategory, IconStack2 } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { useApiHelp } from "@contexts/ApiHelpContext";
 import { useStoreContext, StoreProvider } from "@contexts/StoreContext";
@@ -12,10 +12,14 @@ import { authApi, crudApi } from "@services/api";
 const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: IconLayoutDashboard },
   { to: "/dashboard/libraries", label: "Libraries", icon: IconBooks },
-  { to: "/dashboard/products", label: "Products", icon: IconPackage },
-  { to: "/dashboard/stock-batches", label: "Stock Batches", icon: IconPackage },
-  { to: "/dashboard/stock-movements", label: "Stock Movements", icon: IconPackage },
-  { to: "/dashboard/waste-logs", label: "Waste Logs", icon: IconTrash },
+  {
+    label: "Products",
+    icon: IconPackage,
+    children: [
+      { to: "/dashboard/products/collections", label: "Collections", icon: IconCategory },
+      { to: "/dashboard/products/inventory", label: "Inventory", icon: IconStack2 },
+    ],
+  },
   { to: "/dashboard/menu-items", label: "Menu Items", icon: IconMenu2 },
   { to: "/dashboard/carts", label: "Carts", icon: IconShoppingBag },
   { to: "/dashboard/orders", label: "Orders", icon: IconClipboardList },
@@ -27,6 +31,27 @@ const NAV = [
 function NavItem({ to, label, icon: Icon, isActive, large }: { to: string; label: string; icon: React.ComponentType<{ size?: number }>; isActive: boolean; large: boolean }) {
   const link = <NavLink component={Link} to={to} label={large ? label : null} leftSection={<Icon size={large ? 18 : 22} />} active={isActive} variant="light" style={{ borderRadius: "var(--mantine-radius-md)", fontWeight: isActive ? 600 : 500, backgroundColor: isActive ? "var(--mantine-color-primary-0)" : undefined }} />;
   return large ? link : <Tooltip key={to} label={label} position="right" offset={8}>{link}</Tooltip>;
+}
+
+function NavParent({ item, isChildActive, large }: { item: { label: string; icon: React.ComponentType<{ size?: number }>; children: { to: string; label: string; icon: React.ComponentType<{ size?: number }> }[] }; isChildActive: boolean; large: boolean }) {
+  const location = useLocation();
+  const Icon = item.icon;
+  return (
+    <NavLink
+      defaultOpened={isChildActive}
+      leftSection={<Icon size={large ? 18 : 22} />}
+      label={large ? item.label : null}
+      variant="light"
+      style={{ borderRadius: "var(--mantine-radius-md)" }}
+    >
+      {item.children.map((child) => {
+        const ChildIcon = child.icon;
+        const active = location.pathname === child.to || (child.to !== "/dashboard" && location.pathname.startsWith(child.to));
+        const link = <NavLink component={Link} to={child.to} label={large ? child.label : null} leftSection={large ? <ChildIcon size={16} /> : null} active={active} variant="light" style={{ borderRadius: "var(--mantine-radius-md)", fontWeight: active ? 600 : 500, backgroundColor: active ? "var(--mantine-color-primary-0)" : undefined }} />;
+        return large ? link : <Tooltip key={child.to} label={child.label} position="right" offset={8}>{link}</Tooltip>;
+      })}
+    </NavLink>
+  );
 }
 
 function LocationFilter({ large }: { large: boolean }) {
@@ -96,9 +121,13 @@ export default function AppShellLayout() {
           </MantineAppShell.Section>
           <MantineAppShell.Section mt="md" grow>
             <Stack gap={4}>
-              {NAV.map(({ to, label, icon }) => (
-                <NavItem key={to} to={to} label={label} icon={icon} isActive={isActive(to)} large={large} />
-              ))}
+              {NAV.map((entry) =>
+                'children' in entry ? (
+                  <NavParent key={entry.label} item={entry} isChildActive={entry.children.some((c) => isActive(c.to))} large={large} />
+                ) : (
+                  <NavItem key={entry.to} to={entry.to} label={entry.label} icon={entry.icon} isActive={isActive(entry.to)} large={large} />
+                )
+              )}
             </Stack>
           </MantineAppShell.Section>
         </MantineAppShell.Navbar>
