@@ -26,6 +26,9 @@
       ],
       "@config/*": [
         "src/config/*"
+      ],
+      "@contexts/*": [
+        "src/contexts/*"
       ]
     },
     "target": "ES2022",

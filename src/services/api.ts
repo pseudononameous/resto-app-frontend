@@ -20,3 +20,32 @@ export const authApi = {
       { withCredentials: true }
     ),
 };
+
+const base = (path: string) => ({
+  list: (params?: Record<string, unknown>) => axios.get(`/v1/${path}`, { params }),
+  get: (id: number) => axios.get(`/v1/${path}/${id}`),
+  create: (data: object) => axios.post(`/v1/${path}`, data),
+  update: (id: number, data: object) => axios.put(`/v1/${path}/${id}`, data),
+  delete: (id: number) => axios.delete(`/v1/${path}/${id}`),
+});
+
+export const crudApi = {
+  brands: base('brands'),
+  categories: base('categories'),
+  stores: base('stores'),
+  products: base('products'),
+  menuCategories: base('menu-categories'),
+  menuItems: base('menu-items'),
+  deliveryZones: base('delivery-zones'),
+  orderTypes: base('order-types'),
+  groups: base('groups'),
+  customers: base('customers'),
+  comboMeals: base('combo-meals'),
+  carts: base('carts'),
+  orders: base('orders'),
+  stockMovements: base('stock-movements'),
+  stockBatches: base('stock-batches'),
+  reservations: base('reservations'),
+  wasteLogs: base('waste-logs'),
+  deliveries: base('deliveries'),
+};
