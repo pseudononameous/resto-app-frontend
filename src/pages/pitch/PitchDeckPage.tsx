@@ -29,7 +29,6 @@ import {
   IconDatabase,
   IconCurrencyDollar,
   IconPlug,
-  IconAlertCircle,
   IconBuildingStore,
   IconCheck,
   IconX,
@@ -38,7 +37,6 @@ import {
 const CANVAS = '#050509';
 const TEXT_MAIN = '#f9fafb';
 const TEXT_MUTED = '#9ca3af';
-const ACCENT = '#f97316';
 const ACCENT_SOFT = '#fb923c';
 const BORDER = 'rgba(255,255,255,0.08)';
 const CARD_BG = 'rgba(255,255,255,0.04)';
