@@ -81,11 +81,25 @@ export default function InventoryPage() {
   });
 
   const handleExport = () => {
-    const header = ['id', 'name', 'sku', 'price', 'qty', 'stock', 'batches', 'waste_qty', 'category', 'availability'];
-    const rows = [header, ...list.map((p) => {
-      const sw = stockWasteByProduct[p.id];
-      return [p.id, p.name ?? '', p.sku ?? '', p.price ?? '', p.qty ?? '', sw?.stock ?? '', sw?.batches ?? '', sw?.wasteQty ?? '', p.category?.name ?? '', p.availability ? '1' : '0'];
-    })];
+    const header: string[] = ['id', 'name', 'sku', 'price', 'qty', 'stock', 'batches', 'waste_qty', 'category', 'availability'];
+    const rows: string[][] = [
+      header,
+      ...list.map((p) => {
+        const sw = stockWasteByProduct[p.id];
+        return [
+          String(p.id),
+          p.name ?? '',
+          p.sku ?? '',
+          p.price != null ? String(p.price) : '',
+          p.qty != null ? String(p.qty) : '',
+          sw?.stock != null ? String(sw.stock) : '',
+          sw?.batches != null ? String(sw.batches) : '',
+          sw?.wasteQty != null ? String(sw.wasteQty) : '',
+          p.category?.name ?? '',
+          p.availability ? '1' : '0',
+        ];
+      }),
+    ];
     downloadCsv(rows, `inventory-${new Date().toISOString().slice(0, 10)}.csv`);
     notifications.show({ message: 'Export started', color: 'green' });
   };

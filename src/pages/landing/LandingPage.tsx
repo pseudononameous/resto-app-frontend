@@ -183,7 +183,7 @@ export default function LandingPage() {
         }}
       >
         <Container size="xl">
-          <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl" align="center">
+          <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">
             <Stack gap="lg">
               <Text size="sm" fw={600} tt="uppercase" c={ACCENT_SOFT} style={{ letterSpacing: 4 }}>
                 The RestoApp Commerce Ecosystem
@@ -350,7 +350,7 @@ export default function LandingPage() {
         }}
       >
         <Container size="xl">
-          <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl" align="center">
+          <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">
             <Stack gap="md">
               <Text size="sm" fw={600} c={ACCENT_SOFT} tt="uppercase" style={{ letterSpacing: 3 }}>
                 Ecosystem

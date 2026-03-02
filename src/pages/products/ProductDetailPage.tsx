@@ -11,7 +11,6 @@ import {
   Badge,
   Box,
   Loader,
-  SimpleGrid,
   Modal,
   TextInput,
   NumberInput,
@@ -68,7 +67,7 @@ export default function ProductDetailPage() {
   const [availability, setAvailability] = useState(true);
   const [categoryId, setCategoryId] = useState<string | null>(null);
   const [brandId, setBrandId] = useState<string | null>(null);
-  const [batchModal, setBatchModal] = useState<'add' | { id: number } | null>(null);
+  const [batchModal, setBatchModal] = useState<{ id: number } | null>(null);
   const [batchQty, setBatchQty] = useState(0);
   const [batchPrepared, setBatchPrepared] = useState('');
   const [batchExpiry, setBatchExpiry] = useState('');
@@ -172,7 +171,7 @@ export default function ProductDetailPage() {
   };
   const batchCreate = useMutation({
     mutationFn: (payload: Record<string, unknown>) => crudApi.stockBatches.create(payload),
-    onSuccess: (_, variables) => {
+    onSuccess: () => {
       inv();
       if (!saveAndAddAnother) setReceiveOpen(false);
       else {
@@ -258,9 +257,9 @@ export default function ProductDetailPage() {
   const totalStock = batches.reduce((s: number, b: { remaining_quantity?: number; quantity?: number }) => s + (b.remaining_quantity ?? b.quantity ?? 0), 0);
   const lowThreshold = product?.qty ?? 10;
   const isLowStock = totalStock <= lowThreshold;
-  const editingBatchId = typeof batchModal === 'object' && batchModal !== null ? batchModal.id : null;
-  const editingMovementId = typeof movementModal === 'object' && movementModal !== null ? movementModal.id : null;
-  const editingWasteId = typeof wasteModal === 'object' && wasteModal !== null ? wasteModal.id : null;
+  const editingBatchId = batchModal?.id ?? null;
+  const editingMovementId = movementModal && movementModal !== 'add' ? movementModal.id : null;
+  const editingWasteId = wasteModal && wasteModal !== 'add' ? wasteModal.id : null;
   const getBatchStatus = (b: { remaining_quantity?: number; quantity?: number; expiry_date?: string | null }) => {
     const rem = b.remaining_quantity ?? b.quantity ?? 0;
     if (rem <= 0) return { label: 'Depleted', color: 'blue' };
@@ -458,19 +457,19 @@ export default function ProductDetailPage() {
         </Stack>
       </Modal>
 
-      <Modal opened={batchModal !== null} onClose={() => setBatchModal(null)} title={batchModal === 'add' ? 'Add stock batch' : 'Edit stock batch'}>
+      <Modal opened={batchModal !== null} onClose={() => setBatchModal(null)} title="Edit stock batch">
         <Stack>
           <NumberInput label="Quantity" value={batchQty} onChange={(v) => setBatchQty(Number(v) || 0)} min={0} required />
           <TextInput label="Prepared date" type="date" value={batchPrepared} onChange={(e) => setBatchPrepared(e.target.value)} />
           <TextInput label="Expiry date" type="date" value={batchExpiry} onChange={(e) => setBatchExpiry(e.target.value)} />
           <Group>
             <Button
-              onClick={() => (batchModal === 'add' ? batchCreate.mutate() : editingBatchId != null && batchUpdate.mutate(editingBatchId))}
-              loading={batchCreate.isPending || batchUpdate.isPending}
+              onClick={() => editingBatchId != null && batchUpdate.mutate(editingBatchId)}
+              loading={batchUpdate.isPending}
             >
-              {batchModal === 'add' ? 'Add' : 'Update'}
+              Update
             </Button>
-            {batchModal !== 'add' && editingBatchId != null && (
+            {editingBatchId != null && (
               <Button color="red" variant="light" onClick={() => batchDelete.mutate(editingBatchId)} loading={batchDelete.isPending}>
                 Delete
               </Button>
@@ -504,7 +503,19 @@ export default function ProductDetailPage() {
         <Stack>
           <Select label="Batch" data={batchOpts} value={wasteBatchId} onChange={(value) => setWasteBatchId(value)} clearable placeholder="Optional" />
           <NumberInput label="Quantity wasted" value={wasteQty} onChange={(v) => setWasteQty(Number(v) || 0)} min={0} required />
-          <Select label="Reason" data={[{ value: 'expired', label: 'Expired' }, { value: 'spoiled', label: 'Spoiled' }, { value: 'damaged', label: 'Damaged' }, { value: 'preparation_waste', label: 'Preparation waste' }, { value: 'other', label: 'Other' }]} value={wasteReason || null} onChange={setWasteReason} clearable />
+          <Select
+            label="Reason"
+            data={[
+              { value: 'expired', label: 'Expired' },
+              { value: 'spoiled', label: 'Spoiled' },
+              { value: 'damaged', label: 'Damaged' },
+              { value: 'preparation_waste', label: 'Preparation waste' },
+              { value: 'other', label: 'Other' },
+            ]}
+            value={wasteReason || null}
+            onChange={(value) => setWasteReason(value ?? '')}
+            clearable
+          />
           <TextInput label="Date" type="date" value={wasteDate} onChange={(e) => setWasteDate(e.target.value)} />
           <Group>
             <Button
