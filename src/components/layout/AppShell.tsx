@@ -9,7 +9,10 @@ import ApiHelpSidebar from "./ApiHelpSidebar";
 import { useAuthStore } from "@stores/useAuthStore";
 import { authApi, crudApi } from "@services/api";
 
-const NAV = [
+type NavChild = { to: string; label: string; icon: React.ComponentType<{ size?: number }> };
+type NavEntry = { label: string; icon: React.ComponentType<{ size?: number }>; to?: string; children?: NavChild[] };
+
+const NAV: NavEntry[] = [
   { to: "/dashboard", label: "Dashboard", icon: IconLayoutDashboard },
   { to: "/dashboard/libraries", label: "Libraries", icon: IconBooks },
   {
@@ -29,12 +32,12 @@ const NAV = [
   { to: "/dashboard/reservations", label: "Reservations", icon: IconCalendar },
 ];
 
-function NavItem({ to, label, icon: Icon, isActive, large }: { to: string; label: string; icon: React.ComponentType<{ size?: number }>; isActive: boolean; large: boolean }) {
+function NavItem({ to, label, icon: Icon, isActive, large }: { to: string; label: string; icon: React.ComponentType<{ size?: number }>; isActive: boolean; large: boolean; key?: React.Key }) {
   const link = <NavLink component={Link} to={to} label={large ? label : null} leftSection={<Icon size={large ? 18 : 22} />} active={isActive} variant="light" style={{ borderRadius: "var(--mantine-radius-md)", fontWeight: isActive ? 600 : 500, backgroundColor: isActive ? "var(--mantine-color-primary-0)" : undefined }} />;
   return large ? link : <Tooltip key={to} label={label} position="right" offset={8}>{link}</Tooltip>;
 }
 
-function NavParent({ item, isChildActive, large }: { item: { label: string; icon: React.ComponentType<{ size?: number }>; children: { to: string; label: string; icon: React.ComponentType<{ size?: number }> }[] }; isChildActive: boolean; large: boolean }) {
+function NavParent({ item, isChildActive, large }: { item: Omit<NavEntry, "children" | "to"> & { children: NavChild[] }; isChildActive: boolean; large: boolean; key?: React.Key }) {
   const location = useLocation();
   const Icon = item.icon;
   return (
@@ -44,7 +47,7 @@ function NavParent({ item, isChildActive, large }: { item: { label: string; icon
       label={large ? item.label : null}
       variant="light"
       style={{ borderRadius: "var(--mantine-radius-md)" }}
-    >
+      >
       {item.children.map((child) => {
         const ChildIcon = child.icon;
         const active = location.pathname === child.to || (child.to !== "/dashboard" && location.pathname.startsWith(child.to));
@@ -69,7 +72,7 @@ function LocationFilter({ large }: { large: boolean }) {
         placeholder={large ? "Filter by store" : "Store"}
         data={storeOpts}
         value={storeContext.storeId != null ? String(storeContext.storeId) : ""}
-        onChange={(v) => storeContext.setStoreId(v ? +v : null)}
+        onChange={(v: string | null) => storeContext.setStoreId(v ? +v : null)}
         clearable
         styles={{ label: { fontSize: "0.7rem" } }}
       />
@@ -122,13 +125,31 @@ export default function AppShellLayout() {
           </MantineAppShell.Section>
           <MantineAppShell.Section mt="md" grow>
             <Stack gap={4}>
-              {NAV.map((entry) =>
-                'children' in entry ? (
-                  <NavParent key={entry.label} item={entry} isChildActive={entry.children.some((c) => isActive(c.to))} large={large} />
-                ) : (
-                  <NavItem key={entry.to} to={entry.to} label={entry.label} icon={entry.icon} isActive={isActive(entry.to)} large={large} />
-                )
-              )}
+              {NAV.map((entry) => {
+                const children = entry.children ?? [];
+                const hasChildren = children.length > 0;
+                if (hasChildren) {
+                  return (
+                    <NavParent
+                      key={entry.label}
+                      item={{ label: entry.label, icon: entry.icon, children }}
+                      isChildActive={children.some((c) => isActive(c.to))}
+                      large={large}
+                    />
+                  );
+                }
+                if (!entry.to) return null;
+                return (
+                  <NavItem
+                    key={entry.to}
+                    to={entry.to}
+                    label={entry.label}
+                    icon={entry.icon}
+                    isActive={isActive(entry.to)}
+                    large={large}
+                  />
+                );
+              })}
             </Stack>
           </MantineAppShell.Section>
         </MantineAppShell.Navbar>

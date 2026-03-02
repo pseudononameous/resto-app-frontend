@@ -100,7 +100,6 @@ export default function ProductDetailPage() {
   const [batchDrawerId, setBatchDrawerId] = useState<number | null>(null);
   const [movementTypeFilter, setMovementTypeFilter] = useState<string | null>(null);
   const LOW_STOCK_DAYS = 14;
-  const FRESH_DAYS = 30;
 
   const { data: product, isLoading: productLoading } = useQuery({
     queryKey: ['product', productId],
@@ -259,6 +258,9 @@ export default function ProductDetailPage() {
   const totalStock = batches.reduce((s: number, b: { remaining_quantity?: number; quantity?: number }) => s + (b.remaining_quantity ?? b.quantity ?? 0), 0);
   const lowThreshold = product?.qty ?? 10;
   const isLowStock = totalStock <= lowThreshold;
+  const editingBatchId = typeof batchModal === 'object' && batchModal !== null ? batchModal.id : null;
+  const editingMovementId = typeof movementModal === 'object' && movementModal !== null ? movementModal.id : null;
+  const editingWasteId = typeof wasteModal === 'object' && wasteModal !== null ? wasteModal.id : null;
   const getBatchStatus = (b: { remaining_quantity?: number; quantity?: number; expiry_date?: string | null }) => {
     const rem = b.remaining_quantity ?? b.quantity ?? 0;
     if (rem <= 0) return { label: 'Depleted', color: 'blue' };
@@ -462,8 +464,17 @@ export default function ProductDetailPage() {
           <TextInput label="Prepared date" type="date" value={batchPrepared} onChange={(e) => setBatchPrepared(e.target.value)} />
           <TextInput label="Expiry date" type="date" value={batchExpiry} onChange={(e) => setBatchExpiry(e.target.value)} />
           <Group>
-            <Button onClick={() => batchModal === 'add' ? batchCreate.mutate() : batchModal.id && batchUpdate.mutate(batchModal.id)} loading={batchCreate.isPending || batchUpdate.isPending}>{batchModal === 'add' ? 'Add' : 'Update'}</Button>
-            {batchModal !== 'add' && batchModal?.id != null && <Button color="red" variant="light" onClick={() => batchDelete.mutate(batchModal.id)} loading={batchDelete.isPending}>Delete</Button>}
+            <Button
+              onClick={() => (batchModal === 'add' ? batchCreate.mutate() : editingBatchId != null && batchUpdate.mutate(editingBatchId))}
+              loading={batchCreate.isPending || batchUpdate.isPending}
+            >
+              {batchModal === 'add' ? 'Add' : 'Update'}
+            </Button>
+            {batchModal !== 'add' && editingBatchId != null && (
+              <Button color="red" variant="light" onClick={() => batchDelete.mutate(editingBatchId)} loading={batchDelete.isPending}>
+                Delete
+              </Button>
+            )}
           </Group>
         </Stack>
       </Modal>
@@ -474,21 +485,39 @@ export default function ProductDetailPage() {
           <NumberInput label="Quantity" value={movementQty} onChange={(v) => setMovementQty(Number(v) || 0)} min={0} required />
           <TextInput label="Reference ID" value={movementRef} onChange={(e) => setMovementRef(e.target.value)} />
           <Group>
-            <Button onClick={() => movementModal === 'add' ? movementCreate.mutate() : movementModal.id && movementUpdate.mutate(movementModal.id)} loading={movementCreate.isPending || movementUpdate.isPending}>{movementModal === 'add' ? 'Add' : 'Update'}</Button>
-            {movementModal !== 'add' && movementModal?.id != null && <Button color="red" variant="light" onClick={() => movementDelete.mutate(movementModal.id)} loading={movementDelete.isPending}>Delete</Button>}
+            <Button
+              onClick={() => (movementModal === 'add' ? movementCreate.mutate() : editingMovementId != null && movementUpdate.mutate(editingMovementId))}
+              loading={movementCreate.isPending || movementUpdate.isPending}
+            >
+              {movementModal === 'add' ? 'Add' : 'Update'}
+            </Button>
+            {movementModal !== 'add' && editingMovementId != null && (
+              <Button color="red" variant="light" onClick={() => movementDelete.mutate(editingMovementId)} loading={movementDelete.isPending}>
+                Delete
+              </Button>
+            )}
           </Group>
         </Stack>
       </Modal>
 
       <Modal opened={wasteModal !== null} onClose={() => setWasteModal(null)} title={wasteModal === 'add' ? 'Log Waste' : 'Edit waste log'}>
         <Stack>
-          <Select label="Batch" data={batchOpts} value={wasteBatchId} onChange={setWasteBatchId} clearable placeholder="Optional" />
+          <Select label="Batch" data={batchOpts} value={wasteBatchId} onChange={(value) => setWasteBatchId(value)} clearable placeholder="Optional" />
           <NumberInput label="Quantity wasted" value={wasteQty} onChange={(v) => setWasteQty(Number(v) || 0)} min={0} required />
           <Select label="Reason" data={[{ value: 'expired', label: 'Expired' }, { value: 'spoiled', label: 'Spoiled' }, { value: 'damaged', label: 'Damaged' }, { value: 'preparation_waste', label: 'Preparation waste' }, { value: 'other', label: 'Other' }]} value={wasteReason || null} onChange={setWasteReason} clearable />
           <TextInput label="Date" type="date" value={wasteDate} onChange={(e) => setWasteDate(e.target.value)} />
           <Group>
-            <Button onClick={() => wasteModal === 'add' ? wasteCreate.mutate() : wasteModal.id && wasteUpdate.mutate(wasteModal.id)} loading={wasteCreate.isPending || wasteUpdate.isPending}>Save</Button>
-            {wasteModal !== 'add' && wasteModal?.id != null && <Button color="red" variant="light" onClick={() => wasteDelete.mutate(wasteModal.id)} loading={wasteDelete.isPending}>Delete</Button>}
+            <Button
+              onClick={() => (wasteModal === 'add' ? wasteCreate.mutate() : editingWasteId != null && wasteUpdate.mutate(editingWasteId))}
+              loading={wasteCreate.isPending || wasteUpdate.isPending}
+            >
+              Save
+            </Button>
+            {wasteModal !== 'add' && editingWasteId != null && (
+              <Button color="red" variant="light" onClick={() => wasteDelete.mutate(editingWasteId)} loading={wasteDelete.isPending}>
+                Delete
+              </Button>
+            )}
           </Group>
         </Stack>
       </Modal>

@@ -21,7 +21,13 @@ export default function StockBatchesPage() {
 
   const listParams = storeId != null ? { store_id: storeId } : undefined;
   const { data: list = [] } = useQuery({ queryKey: ['stock-batches', storeId], queryFn: async () => (await crudApi.stockBatches.list(listParams)).data?.data ?? [] });
-  const { data: products = [] } = useQuery({ queryKey: ['products', storeId], queryFn: async () => { const r = (await crudApi.products.list(listParams)).data as { data?: unknown[] }; return Array.isArray(r?.data) ? r.data : []; } });
+  const { data: products = [] } = useQuery<{ id: number; name: string }[]>({
+    queryKey: ['products', storeId],
+    queryFn: async () => {
+      const r = (await crudApi.products.list(listParams)).data as { data?: { id: number; name: string }[] };
+      return Array.isArray(r?.data) ? r.data : [];
+    },
+  });
   const create = useMutation({ mutationFn: (d: Record<string, unknown>) => crudApi.stockBatches.create(d), onSuccess: () => { qc.invalidateQueries({ queryKey: ['stock-batches'] }); setOpened(false); notifications.show({ message: 'Created', color: 'green' }); } });
   const update = useMutation({ mutationFn: ({ id, payload }: { id: number; payload: Record<string, unknown> }) => crudApi.stockBatches.update(id, payload), onSuccess: () => { qc.invalidateQueries({ queryKey: ['stock-batches'] }); setOpened(false); setEditingId(null); notifications.show({ message: 'Updated', color: 'green' }); } });
   const remove = useMutation({ mutationFn: (id: number) => crudApi.stockBatches.delete(id), onSuccess: () => { qc.invalidateQueries({ queryKey: ['stock-batches'] }); notifications.show({ message: 'Deleted', color: 'green' }); } });

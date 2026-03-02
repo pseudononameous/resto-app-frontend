@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Button, Paper, Table, Group, ActionIcon, Modal, TextInput, Checkbox, Stack, Title, Text } from '@mantine/core';
+import { Button, Paper, Table, Group, ActionIcon, Modal, TextInput, Checkbox, Stack, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconEdit, IconTrash, IconPlus } from '@tabler/icons-react';
@@ -21,7 +21,7 @@ export default function CrudListPage({ title, api, columns = [{ key: 'name', lab
   const [name, setName] = useState('');
   const [active, setActive] = useState(true);
 
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: [title, 'list'],
     queryFn: async () => (await api.list()).data?.data ?? [],
   });

@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Container,
-  Divider,
   Group,
   SimpleGrid,
   Stack,
@@ -10,7 +9,7 @@ import {
   ThemeIcon,
   Title,
 } from '@mantine/core';
-import type { ReactNode } from 'react';
+import type { ReactNode, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { IconChefHat, IconReceipt2, IconShoppingCart, IconUsers, IconCashRegister, IconReportAnalytics } from '@tabler/icons-react';
 
@@ -19,7 +18,6 @@ const CANVAS = '#050509';
 const CANVAS_SOFT = '#0b0b10';
 const TEXT_MAIN = '#f9fafb';
 const TEXT_MUTED = '#9ca3af';
-const ACCENT = '#ff6a3d'; // RestoApp orange
 const ACCENT_SOFT = '#ffb347';
 
 const HERO_IMAGE =
@@ -527,7 +525,7 @@ export default function LandingPage() {
   );
 }
 
-function FeatureCard({ feature }: { feature: Feature }) {
+function FeatureCard({ feature }: { feature: Feature; key?: React.Key }) {
   return (
     <Box
       component="article"
@@ -540,12 +538,12 @@ function FeatureCard({ feature }: { feature: Feature }) {
         boxShadow: '0 18px 45px rgba(0,0,0,0.85)',
         transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
       }}
-      onMouseEnter={(e) => {
+      onMouseEnter={(e: MouseEvent<HTMLDivElement>) => {
         e.currentTarget.style.transform = 'translateY(-6px)';
         e.currentTarget.style.boxShadow = '0 26px 70px rgba(0,0,0,0.95)';
         e.currentTarget.style.borderColor = 'rgba(255,106,61,0.9)';
       }}
-      onMouseLeave={(e) => {
+      onMouseLeave={(e: MouseEvent<HTMLDivElement>) => {
         e.currentTarget.style.transform = 'none';
         e.currentTarget.style.boxShadow = '0 18px 45px rgba(0,0,0,0.85)';
         e.currentTarget.style.borderColor = 'rgba(148,163,184,0.5)';

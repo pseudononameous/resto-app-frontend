@@ -31,7 +31,7 @@ export default function InventoryPage() {
   const batchParams = storeId ? { store_id: storeId } : undefined;
   const [importFile, setImportFile] = useState<File | null>(null);
 
-  const { data: products = [], isLoading } = useQuery({
+  const { data: products = [], isLoading } = useQuery<Product[]>({
     queryKey: ['products', 'inventory', storeId],
     queryFn: async () => (await crudApi.products.list(listParams)).data?.data ?? [],
   });

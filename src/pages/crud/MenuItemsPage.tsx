@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { PageHeader, ActionButtons, CrudModal } from '@components/ui';
 import { DataTable } from '@components/tables';
-import { Stack, TextInput, NumberInput, Select, Checkbox, Group, Button, Box } from '@mantine/core';
+import { Stack, TextInput, NumberInput, Select, Checkbox, Group, Button } from '@mantine/core';
 import { useState } from 'react';
 import { notifications } from '@mantine/notifications';
 import { crudApi } from '@services/api';
@@ -27,7 +27,13 @@ export default function MenuItemsPage() {
   const listParams = storeId != null ? { store_id: storeId } : undefined;
   const { data: items = [] } = useQuery({ queryKey: ['menu-items', storeId], queryFn: async () => (await crudApi.menuItems.list(listParams)).data?.data ?? [] });
   const { data: categories = [] } = useQuery({ queryKey: ['menu-categories', storeId], queryFn: async () => (await crudApi.menuCategories.list(listParams)).data?.data ?? [] });
-  const { data: products = [] } = useQuery({ queryKey: ['products', storeId], queryFn: async () => { const r = (await crudApi.products.list(listParams)).data as { data?: unknown[] }; return Array.isArray(r?.data) ? r.data : []; } });
+  const { data: products = [] } = useQuery<{ id: number; name: string }[]>({
+    queryKey: ['products', storeId],
+    queryFn: async () => {
+      const r = (await crudApi.products.list(listParams)).data as { data?: { id: number; name: string }[] };
+      return Array.isArray(r?.data) ? r.data : [];
+    },
+  });
 
   const create = useMutation({ mutationFn: (d: Record<string, unknown>) => crudApi.menuItems.create(d), onSuccess: () => { qc.invalidateQueries({ queryKey: ['menu-items'] }); setOpened(false); notifications.show({ message: 'Created', color: 'green' }); } });
   const update = useMutation({ mutationFn: ({ id, payload }: { id: number; payload: Record<string, unknown> }) => crudApi.menuItems.update(id, payload), onSuccess: () => { qc.invalidateQueries({ queryKey: ['menu-items'] }); setOpened(false); setEditingId(null); notifications.show({ message: 'Updated', color: 'green' }); } });

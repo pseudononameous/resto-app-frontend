@@ -1,7 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, Paper, Table, Group, ActionIcon, Modal, TextInput, Checkbox, Stack, Title, Select, NumberInput, Badge } from '@mantine/core';
 import { LibBadge } from '@components/ui/LibBadge';
-import { LibBadge } from '@components/ui/LibBadge';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconEdit, IconTrash, IconPlus } from '@tabler/icons-react';
@@ -28,7 +27,7 @@ export default function ProductsPage() {
   const [storeId, setStoreId] = useState<string | null>(null);
 
   const listParams = storeIdFromContext ? { store_id: storeIdFromContext } : undefined;
-  const { data: products = [] } = useQuery({
+  const { data: products = [] } = useQuery<Product[]>({
     queryKey: ['products', storeIdFromContext],
     queryFn: async () => (await crudApi.products.list(listParams)).data?.data ?? [],
   });

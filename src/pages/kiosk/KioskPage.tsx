@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useState, type MouseEvent } from 'react';
 import {
   Box,
   Button,
@@ -36,7 +37,7 @@ export default function KioskPage() {
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [orderTypeId, setOrderTypeId] = useState<string | null>(null);
   const [customerId, setCustomerId] = useState<string | null>(null);
-  const [addressId, setAddressId] = useState<string | null>(null);
+  const [addressId] = useState<string | null>(null);
   const [zoneId, setZoneId] = useState<string | null>(null);
   const [orderPlaced, setOrderPlaced] = useState<{ bill_no: string; order_id: number } | null>(null);
 
@@ -60,7 +61,7 @@ export default function KioskPage() {
         total: 0,
         store_id: storeId ?? undefined,
       }),
-    onSuccess: (res) => {
+    onSuccess: (res: { data?: { data?: Cart } }) => {
       const cart = res.data?.data as Cart;
       if (cart?.id) {
         sessionStorage.setItem(KIOSK_CART_KEY, String(cart.id));
@@ -83,14 +84,24 @@ export default function KioskPage() {
     qc.invalidateQueries({ queryKey: ['carts'] });
   };
 
-  const { data: cart, isLoading: cartLoading, isError: cartError } = useQuery({
+  const { data: cart, isLoading: cartLoading, isError: cartError } = useQuery<Cart>({
     queryKey: ['cart', cartId],
     queryFn: async () => (await crudApi.carts.get(cartId)).data?.data as Cart,
     enabled: !!cartId,
     retry: false,
-    onError: clearStoredCart,
-    onSuccess: () => setCartIdInvalid(false),
   });
+
+  useEffect(() => {
+    if (cartError) {
+      clearStoredCart();
+    }
+  }, [cartError]);
+
+  useEffect(() => {
+    if (cart) {
+      setCartIdInvalid(false);
+    }
+  }, [cart]);
 
   if (needCart && !createCart.isSuccess) {
     createCart.mutate();
@@ -128,7 +139,7 @@ export default function KioskPage() {
         address_id: addressId ? Number(addressId) : undefined,
         zone_id: zoneId ? Number(zoneId) : undefined,
       }),
-    onSuccess: (res) => {
+    onSuccess: (res: { data?: { data?: { order?: { id: number; bill_no: string } } } }) => {
       const order = (res.data?.data as { order?: { id: number; bill_no: string } })?.order;
       if (order) {
         setOrderPlaced({ bill_no: order.bill_no, order_id: order.id });
@@ -292,7 +303,7 @@ export default function KioskPage() {
                         color="orange"
                         variant="filled"
                         leftSection={<IconPlus size={14} />}
-                        onClick={(e) => { e.stopPropagation(); addToCart.mutate({ menu_item_id: m.id, quantity: 1 }); }}
+                        onClick={(e: MouseEvent<HTMLButtonElement>) => { e.stopPropagation(); addToCart.mutate({ menu_item_id: m.id, quantity: 1 }); }}
                         disabled={addToCart.isPending}
                       >
                         Add

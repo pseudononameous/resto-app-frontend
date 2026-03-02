@@ -11,7 +11,7 @@ import {
   Badge,
   Divider,
 } from '@mantine/core';
-import { IconChartBar, IconDevices, IconReceipt2, IconStore, IconUsers, IconChefHat } from '@tabler/icons-react';
+import { IconChartBar, IconDevices, IconReceipt2, IconUsers, IconChefHat } from '@tabler/icons-react';
 
 // RestoApp brand-inspired palette
 const EMERALD = '#059669';
@@ -50,7 +50,7 @@ export default function RestoLandingPage() {
           }}
         />
         <Container size="xl" style={{ position: 'relative', zIndex: 1 }}>
-          <SimpleGrid cols={{ base: 1, md: 2 }} spacing={{ base: 40, md: 64 }} align="center">
+          <SimpleGrid cols={{ base: 1, md: 2 }} spacing={{ base: 40, md: 64 }}>
             <Stack gap="lg">
               <Badge
                 size="lg"
@@ -234,7 +234,7 @@ export default function RestoLandingPage() {
                 bullets={['Recipe & yield control', 'Auto stock deductions', 'Waste & variance alerts']}
               />
               <FeatureCard
-                icon={IconStore}
+                icon={IconReceipt2}
                 title="Purchasing & Suppliers"
                 description="Centralized purchasing with branch-level controls. Suggested orders based on movement, par levels, and lead times."
                 bullets={['Digital purchase orders', 'GRN & discrepancies', 'Multi-supplier catalogs']}
