@@ -19,7 +19,7 @@ interface DataTableProps<T> {
 
 export default function DataTable<T>({ columns, data, keyExtractor, isLoading, emptyMessage, actions }: DataTableProps<T>) {
   return (
-    <Paper p="lg" withBorder radius="lg" style={{ boxShadow: "0 4px 16px rgba(0,0,0,.06)" }}>
+    <Paper p="lg" withBorder radius="lg" shadow="sm">
       <Table striped highlightOnHover withTableBorder>
         <Table.Thead>
           <Table.Tr>

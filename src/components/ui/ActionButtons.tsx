@@ -13,12 +13,12 @@ export default function ActionButtons({ viewTo, viewTitle, onEdit, onDelete }: A
   return (
     <Group gap="xs">
       {viewTo && (
-        <ActionIcon variant="subtle" component={Link} to={viewTo} title={viewTitle ?? "View"} radius="md">
+        <ActionIcon variant="subtle" color="orange" component={Link} to={viewTo} title={viewTitle ?? "View"} radius="md">
           <IconEye size={16} />
         </ActionIcon>
       )}
       {onEdit && (
-        <ActionIcon variant="subtle" onClick={onEdit} title="Edit" radius="md">
+        <ActionIcon variant="subtle" color="orange" onClick={onEdit} title="Edit" radius="md">
           <IconEdit size={16} />
         </ActionIcon>
       )}

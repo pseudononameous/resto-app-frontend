@@ -24,6 +24,7 @@ const DeliveriesPage = lazy(() => import('@pages/crud/DeliveriesPage'));
 const ReservationsPage = lazy(() => import('@pages/crud/ReservationsPage'));
 const KioskPage = lazy(() => import('@pages/kiosk/KioskPage'));
 const KitchenTicketsPage = lazy(() => import('@pages/crud/KitchenTicketsPage'));
+const SettingsPage = lazy(() => import('@pages/settings/SettingsPage'));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -50,6 +51,7 @@ const router = createBrowserRouter(
           <Route path="/dashboard/reservations" element={<ReservationsPage />} />
           <Route path="/dashboard/kiosk" element={<KioskPage />} />
           <Route path="/dashboard/kitchen-tickets" element={<KitchenTicketsPage />} />
+          <Route path="/dashboard/settings" element={<SettingsPage />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

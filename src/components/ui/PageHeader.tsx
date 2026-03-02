@@ -16,7 +16,7 @@ export default function PageHeader({ title, subtitle, actionLabel, onAction }: P
         {subtitle && <Text size="sm" c="dimmed" fw={500}>{subtitle}</Text>}
       </div>
       {actionLabel && onAction && (
-        <Button leftSection={<IconPlus size={18} />} onClick={onAction} size="md" radius="md">
+        <Button leftSection={<IconPlus size={18} />} onClick={onAction} size="md" radius="md" color="orange">
           {actionLabel}
         </Button>
       )}

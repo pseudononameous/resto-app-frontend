@@ -196,7 +196,7 @@ export default function KioskPage() {
           shadow="lg"
           style={{
             textAlign: 'center',
-            background: 'linear-gradient(145deg, #fff9f0 0%, #fff 50%)',
+            background: 'var(--mantine-color-default)',
             border: '1px solid var(--mantine-color-orange-2)',
           }}
         >
@@ -231,7 +231,7 @@ export default function KioskPage() {
     <Box
       style={{
         minHeight: '100vh',
-        background: 'linear-gradient(180deg, #fef8f3 0%, #f5f5f5 30%)',
+        background: 'var(--mantine-color-body)',
       }}
     >
       {/* Header */}

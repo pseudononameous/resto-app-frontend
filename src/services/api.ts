@@ -68,3 +68,17 @@ export const crudApi = {
   wasteLogs: base('waste-logs'),
   deliveries: base('deliveries'),
 };
+
+export const usersApi = {
+  ...base('users'),
+};
+
+export const rolesApi = {
+  ...base('roles'),
+  syncPermissions: (roleId: number, permissionIds: number[]) =>
+    axios.put(`/v1/roles/${roleId}/permissions`, { permission_ids: permissionIds }),
+};
+
+export const permissionsApi = {
+  list: (params?: Record<string, unknown>) => axios.get('/v1/permissions', { params }),
+};

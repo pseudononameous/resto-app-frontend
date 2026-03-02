@@ -54,7 +54,7 @@ export default function LoginPage() {
 
   return (
     <Center h="100vh" bg="gray.0">
-      <Paper w={400} p="xl" radius="md" shadow="sm">
+      <Paper w={400} p="xl" radius="lg" shadow="md" withBorder>
         <Title order={2} ta="center" mb="lg">
           {import.meta.env.VITE_APP_NAME ?? 'Resto App'} Login
         </Title>
@@ -79,7 +79,7 @@ export default function LoginPage() {
                 {(loginMutation.error.response?.data as { message?: string })?.message ?? 'Login failed'}
               </Button>
             )}
-            <Button type="submit" loading={loginMutation.isPending} fullWidth>
+            <Button type="submit" loading={loginMutation.isPending} fullWidth color="orange">
               Log in
             </Button>
             <Text size="sm" ta="center">

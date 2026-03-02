@@ -21,7 +21,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <Paper p="xl" m="xl" radius="md" shadow="sm">
+    <Paper p="xl" withBorder radius="lg" shadow="sm">
       <Stack gap="md">
         <Group justify="space-between">
           <Title order={2}>Dashboard</Title>
@@ -29,23 +29,23 @@ export default function DashboardPage() {
         </Group>
         <Text size="sm" c="dimmed">Welcome, {user?.name ?? user?.email ?? 'User'}.</Text>
         <SimpleGrid cols={{ base: 2, sm: 3, md: 4 }} spacing="md">
-          <Button component={Link} to="/dashboard/brands" variant="light">Brands</Button>
-          <Button component={Link} to="/dashboard/categories" variant="light">Categories</Button>
-          <Button component={Link} to="/dashboard/stores" variant="light">Stores</Button>
-          <Button component={Link} to="/dashboard/products" variant="light">Products</Button>
-          <Button component={Link} to="/dashboard/menu-categories" variant="light">Menu Categories</Button>
-          <Button component={Link} to="/dashboard/menu-items" variant="light">Menu Items</Button>
-          <Button component={Link} to="/dashboard/delivery-zones" variant="light">Delivery Zones</Button>
-          <Button component={Link} to="/dashboard/order-types" variant="light">Order Types</Button>
-          <Button component={Link} to="/dashboard/groups" variant="light">Groups</Button>
-          <Button component={Link} to="/dashboard/customers" variant="light">Customers</Button>
-          <Button component={Link} to="/dashboard/combo-meals" variant="light">Combo Meals</Button>
-          <Button component={Link} to="/dashboard/orders" variant="light">Orders</Button>
-          <Button component={Link} to="/dashboard/stock-movements" variant="light">Stock Movements</Button>
-          <Button component={Link} to="/dashboard/stock-batches" variant="light">Stock Batches</Button>
-          <Button component={Link} to="/dashboard/reservations" variant="light">Reservations</Button>
-          <Button component={Link} to="/dashboard/waste-logs" variant="light">Waste Logs</Button>
-          <Button component={Link} to="/dashboard/deliveries" variant="light">Deliveries</Button>
+          <Button component={Link} to="/dashboard/brands" variant="light" color="orange">Brands</Button>
+          <Button component={Link} to="/dashboard/categories" variant="light" color="orange">Categories</Button>
+          <Button component={Link} to="/dashboard/stores" variant="light" color="orange">Stores</Button>
+          <Button component={Link} to="/dashboard/products" variant="light" color="orange">Products</Button>
+          <Button component={Link} to="/dashboard/menu-categories" variant="light" color="orange">Menu Categories</Button>
+          <Button component={Link} to="/dashboard/menu-items" variant="light" color="orange">Menu Items</Button>
+          <Button component={Link} to="/dashboard/delivery-zones" variant="light" color="orange">Delivery Zones</Button>
+          <Button component={Link} to="/dashboard/order-types" variant="light" color="orange">Order Types</Button>
+          <Button component={Link} to="/dashboard/groups" variant="light" color="orange">Groups</Button>
+          <Button component={Link} to="/dashboard/customers" variant="light" color="orange">Customers</Button>
+          <Button component={Link} to="/dashboard/combo-meals" variant="light" color="orange">Combo Meals</Button>
+          <Button component={Link} to="/dashboard/orders" variant="light" color="orange">Orders</Button>
+          <Button component={Link} to="/dashboard/stock-movements" variant="light" color="orange">Stock Movements</Button>
+          <Button component={Link} to="/dashboard/stock-batches" variant="light" color="orange">Stock Batches</Button>
+          <Button component={Link} to="/dashboard/reservations" variant="light" color="orange">Reservations</Button>
+          <Button component={Link} to="/dashboard/waste-logs" variant="light" color="orange">Waste Logs</Button>
+          <Button component={Link} to="/dashboard/deliveries" variant="light" color="orange">Deliveries</Button>
         </SimpleGrid>
       </Stack>
     </Paper>
