@@ -1,12 +1,9 @@
 import {
-  Accordion,
-  Badge,
   Box,
   Button,
   Card,
   Container,
   Group,
-  Paper,
   SimpleGrid,
   Spoiler,
   Stack,
@@ -18,13 +15,14 @@ import type { ReactNode, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import {
   IconBolt,
-  IconBuildingStore,
   IconCash,
-  IconChartBar,
   IconChefHat,
-  IconClockHour4,
-  IconDevices2,
   IconUsersGroup,
+  IconCashRegister,
+  IconReceipt2,
+  IconShoppingCart,
+  IconReportAnalytics,
+  IconUsers,
 } from '@tabler/icons-react';
 
 // Dark, high-contrast palette inspired by the RestoApp hero visuals
@@ -33,6 +31,7 @@ const CANVAS_SOFT = '#0b0b10';
 const TEXT_MAIN = '#f9fafb';
 const TEXT_MUTED = '#9ca3af';
 const ACCENT_SOFT = '#ffb347';
+const ACCENT = '#f97316';
 
 const HERO_IMAGE =
   'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1800&q=80&auto=format&fit=crop';
@@ -387,338 +386,439 @@ export default function LandingPage() {
                   Start with a single concept, then roll out to more stores, brands, and cities without
                   changing platforms.
                 </Text>
-              </Paper>
-            ))}
+              </Stack>
             </Box>
+          </SimpleGrid>
         </Container>
       </Box>
 
       {/* Our Vision */}
-      <Section id="vision" label="Our Vision" title="The unified operating system for restaurants">
-        <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl" className="landing-stagger">
-          <Stack gap="md">
-            <TypingText
-              size="md"
-              color={TEXT_MUTED}
-              text="RestoApp empowers restaurants to own their entire digital experience — from ordering to payment, loyalty to analytics."
-            />
-            <Stack gap={4}>
-              <Text size="md" fw={500} c={TEXT_MAIN}>
-                Run your restaurant from one platform:
-              </Text>
-              <Text size="sm" c={TEXT_MUTED}>✔ Orders · ✔ Payments · ✔ Inventory · ✔ Loyalty · ✔ Analytics</Text>
+      <Box
+        id="vision"
+        py={90}
+        style={{
+          background:
+            'radial-gradient(circle at 0% 0%, rgba(255,180,71,0.12), transparent 55%), radial-gradient(circle at 100% 100%, rgba(15,23,42,0.85), transparent 55%), #050509',
+        }}
+      >
+        <Container size="xl">
+          <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl" className="landing-stagger">
+            <Stack gap="md">
+              <TypingText
+                size="md"
+                color={TEXT_MUTED}
+                text="RestoApp empowers restaurants to own their entire digital experience — from ordering to payment, loyalty to analytics."
+              />
+              <Stack gap={4}>
+                <Text size="md" fw={500} c={TEXT_MAIN}>
+                  Run your restaurant from one platform:
+                </Text>
+                <Text size="sm" c={TEXT_MUTED}>
+                  ✔ Orders · ✔ Payments · ✔ Inventory · ✔ Loyalty · ✔ Analytics
+                </Text>
+              </Stack>
+              <SimpleGrid cols={{ base: 1, md: 4 }} spacing="lg">
+                <StepCard
+                  step="01"
+                  title="Set up"
+                  description="Create brands, branches, and core recipes."
+                />
+                <StepCard
+                  step="02"
+                  title="Connect"
+                  description="Link POS, delivery, and key tools."
+                />
+                <StepCard
+                  step="03"
+                  title="Operate"
+                  description="Run shifts with live stock and menus."
+                />
+                <StepCard
+                  step="04"
+                  title="Review"
+                  description="See performance and adjust quickly."
+                />
+              </SimpleGrid>
             </Stack>
-            <SimpleGrid cols={{ base: 1, md: 4 }} spacing="lg">
-              <StepCard
-                step="01"
-                title="Set up"
-                description="Create brands, branches, and core recipes."
-              />
-              <StepCard
-                step="02"
-                title="Connect"
-                description="Link POS, delivery, and key tools."
-              />
-              <StepCard
-                step="03"
-                title="Operate"
-                description="Run shifts with live stock and menus."
-              />
-              <StepCard
-                step="04"
-                title="Review"
-                description="See performance and adjust quickly."
-              />
+            <Stack gap="md">
+              <Text size="sm" fw={600} c={ACCENT_SOFT} tt="uppercase" style={{ letterSpacing: 3 }}>
+                Operator reality today
+              </Text>
+              <Text size="sm" c={TEXT_MUTED}>
+                Every new vendor adds cost and complexity. Operators juggle disconnected tools, each with its
+                own log-in, fees, and blind spots.
+              </Text>
+              <Stack gap={6}>
+                {[
+                  'Expensive POS that locks them into hardware',
+                  '30%+ delivery fees eroding margins',
+                  'Disconnected tools that do not talk to each other',
+                  'Siloed data with zero customer visibility',
+                  'Multiple logins and training for every system',
+                ].map((item) => (
+                  <Group key={item} gap={6}>
+                    <Text size="sm" c="#f97373">
+                      ❌
+                    </Text>
+                    <Text size="xs" c={TEXT_MUTED}>
+                      {item}
+                    </Text>
+                  </Group>
+                ))}
+              </Stack>
+              <Spoiler maxHeight={52} showLabel="Read full problem" hideLabel="Show less">
+                <Text size="sm" c={TEXT_MUTED}>
+                  Each vendor extracts 2–30% in fees and creates yet another data silo. There is no single
+                  source of truth, and staff must be trained on five or more interfaces just to keep service
+                  running.
+                </Text>
+              </Spoiler>
+            </Stack>
+          </SimpleGrid>
+        </Container>
+      </Box>
+
+      {/* CTA / contact */}
+      <Box
+        id="contact"
+        py={90}
+        style={{
+          background:
+            'radial-gradient(circle at 0% 0%, rgba(255,180,71,0.12), transparent 55%), radial-gradient(circle at 100% 100%, rgba(15,23,42,0.85), transparent 55%), #050509',
+        }}
+      >
+        <Container size="lg">
+          <Box
+            p="xl"
+            style={{
+              borderRadius: 24,
+              background: CANVAS_SOFT,
+              border: '1px solid rgba(148,163,184,0.3)',
+            }}
+          >
+            <Stack gap="lg" align="center" ta="center">
+              <Text size="sm" fw={600} c={ACCENT_SOFT} tt="uppercase" style={{ letterSpacing: 3 }}>
+                Let&apos;s design your RestoApp rollout
+              </Text>
+              <Title order={2} c="white" fw={800}>
+                See RestoApp working with your data.
+              </Title>
+              <Text size="md" c="rgba(226,232,240,0.9)" maw={520}>
+                A short call where we plug your real world into a live workspace — no slides.
+              </Text>
+              <Group gap="md" mt="sm">
+                <Button
+                  component={Link}
+                  to="/register"
+                  size="lg"
+                  radius="xl"
+                  style={{
+                    paddingInline: 24,
+                    borderRadius: 999,
+                    background:
+                      'linear-gradient(135deg, #ffb347 0%, #ff6a3d 40%, #e54721 100%)',
+                    color: '#050509',
+                    fontWeight: 700,
+                  }}
+                >
+                  Book a rollout session
+                </Button>
+                <Button component={Link} to="/login" size="lg" radius="xl" variant="outline" color="gray">
+                  Already a customer? Sign in
+                </Button>
+              </Group>
+            </Stack>
+          </Box>
+        </Container>
+      </Box>
+
+      {/* Why Now */}
+      <Box
+        py={90}
+        style={{
+          background:
+            'radial-gradient(circle at 0% 0%, rgba(255,180,71,0.12), transparent 55%), radial-gradient(circle at 100% 100%, rgba(15,23,42,0.85), transparent 55%), #050509',
+        }}
+      >
+        <Container size="xl">
+          <Stack gap="xl">
+            <Stack gap={4}>
+              <Text size="sm" fw={600} c={ACCENT_SOFT} tt="uppercase" style={{ letterSpacing: 3 }}>
+                Why now?
+              </Text>
+              <Title order={2} size={32} fw={800} c={TEXT_MAIN}>
+                The convergence layer between commerce, fintech, and F&amp;B operations.
+              </Title>
+            </Stack>
+            <SimpleGrid className="landing-stagger" cols={{ base: 1, sm: 2, md: 3 }} spacing="md">
+              {[
+                "Restaurants want control — customer relationships shouldn't be owned by delivery platforms",
+                'Delivery platforms compress margins — 30% commission is unsustainable',
+                'Shopify normalized e-commerce — restaurants expect similar unified commerce tools',
+                'Hardware is cheaper than ever — tablets and kiosks are commoditized',
+                'Embedded fintech revolution — payment rails transform SaaS margin structure',
+                'Multi-location needs visibility — operators need centralized data and control',
+              ].map((item) => (
+                <Card key={item.slice(0, 24)} className="landing-card" p="md">
+                  <Text size="sm" c={TEXT_MUTED}>
+                    {item}
+                  </Text>
+                </Card>
+              ))}
             </SimpleGrid>
           </Stack>
         </Container>
-    </Box>
-
-      {/* CTA / contact */ }
-  <Box
-    id="contact"
-    py={90}
-    style={{
-      background:
-        'radial-gradient(circle at 0% 0%, rgba(255,180,71,0.12), transparent 55%), radial-gradient(circle at 100% 100%, rgba(15,23,42,0.85), transparent 55%), #050509',
-    }}
-  >
-    <Container size="lg">
-      <Box
-        p="xl"
-        style={{
-          borderRadius: 24,
-          background: CANVAS_SOFT,
-          border: '1px solid rgba(148,163,184,0.3)',
-        }}
-      >
-        <Stack gap="lg" align="center" ta="center">
-          <Text size="sm" fw={600} c={ACCENT_SOFT} tt="uppercase" style={{ letterSpacing: 3 }}>
-            Let&apos;s design your RestoApp rollout
-          </Text>
-          <Title order={2} c="white" fw={800}>
-            See RestoApp working with your data.
-          </Title>
-          <Text size="md" c="rgba(226,232,240,0.9)" maw={520}>
-            A short call where we plug your real world into a live workspace — no slides.
-          </Text>
-          <Group gap="md" mt="sm">
-            <Button
-              component={Link}
-              to="/register"
-              size="lg"
-              radius="xl"
-              style={{
-                padding: '6px 10px',
-                borderRadius: 999,
-                background: 'rgba(15,23,42,0.85)',
-                border: '1px dashed rgba(248,113,113,0.45)',
-              }}
-            >
-              <Text size="xs" c={TEXT_MUTED}>
-                {label} system
-              </Text>
-              <Text size="xs" c="#f97373">
-                30% fee
-              </Text>
-          </Group>
-              ))}
-        </Stack>
       </Box>
-      <Stack gap="md">
-        <Text c={TEXT_MUTED}>
-          Every new vendor adds cost and complexity. Operators juggle disconnected tools, each with its own log-in, fees, and blind spots.
-        </Text>
-        <Text size="sm" fw={500} c={TEXT_MAIN}>
-          Today, most restaurants are forced to:
-        </Text>
-        <Stack gap={6}>
-          {[
-            'Expensive POS that locks them into hardware',
-            '30%+ delivery fees eroding margins',
-            'Disconnected tools that do not talk to each other',
-            'Siloed data with zero customer visibility',
-            'Multiple logins and training for every system',
-          ].map((item) => (
-            <Group key={item} gap={6}>
-              <Text size="sm" c="#f97373">
-                ❌
-              </Text>
-              <Text size="xs" c={TEXT_MUTED}>
-                {item}
-              </Text>
-            </Group>
-          ))}
-        </Stack>
-        <Spoiler maxHeight={52} showLabel="Read full problem" hideLabel="Show less">
-          <Text size="sm" c={TEXT_MUTED}>
-            Each vendor extracts 2–30% in fees and creates yet another data silo. There is no single source of truth, and staff must be trained on
-            five or more interfaces just to keep service running.
-          </Text>
-        </Spoiler>
-      </Stack>
-    </SimpleGrid>
-  </Section>
 
-  {/* Why Now */ }
-  <Section label="Why Now?" title="The convergence layer between commerce, fintech, and F&B operations">
-    <SimpleGrid className="landing-stagger" cols={{ base: 1, sm: 2, md: 3 }} spacing="md">
-      {[
-        'Restaurants want control — customer relationships shouldn\'t be owned by delivery platforms',
-        'Delivery platforms compress margins — 30% commission is unsustainable',
-        'Shopify normalized e-commerce — restaurants expect similar unified commerce tools',
-        'Hardware is cheaper than ever — tablets and kiosks are commoditized',
-        'Embedded fintech revolution — payment rails transform SaaS margin structure',
-        'Multi-location needs visibility — operators need centralized data and control',
-      ].map((item) => (
-        <Card key={item.slice(0, 24)} className="landing-card" p="md" style={cardStyle}>
-          <Text size="sm" c={TEXT_MUTED}>{item}</Text>
-        </Card>
-      ))}
-    </SimpleGrid>
-  </Section>
-
-  {/* The Solution */ }
-  <Section id="solution" label="The Solution" title="RestoApp unifies the stack">
-    <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl" className="landing-stagger">
-      <Stack gap="md">
-        <Text c={TEXT_MUTED}>One platform. Complete control. Zero fragmentation.</Text>
-        <Stack gap={6}>
-          {[
-            'Scan from phone — no hardware required',
-            'Order & pay in seconds at the table',
-            'Kitchen receives clean, accurate tickets',
-            'Operators see real-time sales & labor',
-            'Customers earn rewards automatically',
-          ].map((item) => (
-            <Group key={item} gap={8}>
-              <Text size="sm" c={ACCENT}>
-                ✔
-              </Text>
-              <Text size="xs" c={TEXT_MUTED}>
-                {item}
-              </Text>
-            </Group>
-          ))}
-        </Stack>
-      </Stack>
-      <Stack gap="sm">
-        <Text size="xs" fw={500} c={TEXT_MUTED}>
-          How it flows
-        </Text>
-        <Group
-          gap={8}
-          align="center"
-          style={{
-            ...cardStyle,
-            padding: 16,
-            borderRadius: 18,
-            borderColor: 'rgba(234,88,12,0.3)',
-          }}
-        >
-          {['Scan', 'Order', 'Pay', 'Kitchen', 'Analytics'].map((step, index, arr) => (
-            <Group key={step} gap={4}>
-              <Box
-                style={{
-                  padding: '6px 10px',
-                  borderRadius: 999,
-                  background:
-                    index === arr.length - 1
-                      ? 'linear-gradient(135deg, rgba(34,197,94,0.9), rgba(22,163,74,0.95))'
-                      : 'rgba(15,23,42,0.9)',
-                  border: '1px solid rgba(148,163,184,0.5)',
-                }}
-              >
-                <Text size="xs" c={index === arr.length - 1 ? '#f9fafb' : TEXT_MUTED}>
-                  {step}
-                </Text>
-              </Box>
-              {index < arr.length - 1 && (
-                <Text size="xs" c={TEXT_MUTED}>
-                  →
-                </Text>
-              )}
-            </Group>
-          ))}
-        </Group>
-      </Stack>
-    </SimpleGrid>
-    <Box mt="xl">
-      <KioskDemo />
-    </Box>
-  </Section>
-
-  function FeatureCard({ feature }: { feature: Feature; key?: React.Key }) {
-    return (
+      {/* The Solution */}
       <Box
-        component="article"
-        p="lg"
+        id="solution"
+        py={90}
         style={{
           background:
-            'radial-gradient(circle at 0% 0%, rgba(255,180,71,0.18), transparent 60%), #020617',
-          borderRadius: 18,
-          border: '1px solid rgba(148,163,184,0.5)',
-          boxShadow: '0 18px 45px rgba(0,0,0,0.85)',
-          transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
-        }}
-        onMouseEnter={(e: MouseEvent<HTMLDivElement>) => {
-          e.currentTarget.style.transform = 'translateY(-6px)';
-          e.currentTarget.style.boxShadow = '0 26px 70px rgba(0,0,0,0.95)';
-          e.currentTarget.style.borderColor = 'rgba(255,106,61,0.9)';
-        }}
-        onMouseLeave={(e: MouseEvent<HTMLDivElement>) => {
-          e.currentTarget.style.transform = 'none';
-          e.currentTarget.style.boxShadow = '0 18px 45px rgba(0,0,0,0.85)';
-          e.currentTarget.style.borderColor = 'rgba(148,163,184,0.5)';
+            'radial-gradient(circle at 0% 0%, rgba(255,180,71,0.12), transparent 55%), radial-gradient(circle at 100% 100%, rgba(15,23,42,0.85), transparent 55%), #050509',
         }}
       >
-        <Stack gap="sm">
-          <ThemeIcon
-            size={38}
-            radius="md"
-            style={{
-              background: 'rgba(255,106,61,0.12)',
-              color: ACCENT_SOFT,
-              alignSelf: 'flex-start',
-            }}
-          >
-            {feature.icon}
-          </ThemeIcon>
-          <Title order={4} size="h4" c={TEXT_MAIN}>
-            {feature.title}
-          </Title>
-          <Text size="sm" c={TEXT_MUTED}>
-            {feature.description}
-          </Text>
-        </Stack>
+        <Container size="xl">
+          <SectionHeader
+            label="The Solution"
+            title="RestoApp unifies the stack"
+            description="One platform. Complete control. Zero fragmentation."
+          />
+          <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl" className="landing-stagger">
+            <Stack gap="md">
+              <Stack gap={6}>
+                {[
+                  'Scan from phone — no hardware required',
+                  'Order & pay in seconds at the table',
+                  'Kitchen receives clean, accurate tickets',
+                  'Operators see real-time sales & labor',
+                  'Customers earn rewards automatically',
+                ].map((item) => (
+                  <Group key={item} gap={8}>
+                    <Text size="sm" c={ACCENT}>
+                      ✔
+                    </Text>
+                    <Text size="xs" c={TEXT_MUTED}>
+                      {item}
+                    </Text>
+                  </Group>
+                ))}
+              </Stack>
+            </Stack>
+            <Stack gap="sm">
+              <Text size="xs" fw={500} c={TEXT_MUTED}>
+                How it flows
+              </Text>
+              <Group
+                gap={8}
+                align="center"
+                style={{
+                  padding: 16,
+                  borderRadius: 18,
+                  background: '#020617',
+                  border: '1px solid rgba(148,163,184,0.35)',
+                }}
+              >
+                {['Scan', 'Order', 'Pay', 'Kitchen', 'Analytics'].map((step, index, arr) => (
+                  <Group key={step} gap={4}>
+                    <Box
+                      style={{
+                        padding: '6px 10px',
+                        borderRadius: 999,
+                        background:
+                          index === arr.length - 1
+                            ? 'linear-gradient(135deg, rgba(34,197,94,0.9), rgba(22,163,74,0.95))'
+                            : 'rgba(15,23,42,0.9)',
+                        border: '1px solid rgba(148,163,184,0.5)',
+                      }}
+                    >
+                      <Text size="xs" c={index === arr.length - 1 ? '#f9fafb' : TEXT_MUTED}>
+                        {step}
+                      </Text>
+                    </Box>
+                    {index < arr.length - 1 && (
+                      <Text size="xs" c={TEXT_MUTED}>
+                        →
+                      </Text>
+                    )}
+                  </Group>
+                ))}
+              </Group>
+              <Box mt="xl">
+                <KioskDemo />
+              </Box>
+            </Stack>
+          </SimpleGrid>
+        </Container>
       </Box>
-    );
-  }
 
-  function Metric({ label, value }: { label: string; value: string }) {
-    return (
-      <Box
-        p="sm"
-        style={{
-          borderRadius: 12,
-          background: 'rgba(15,23,42,0.9)',
-          border: '1px solid rgba(148,163,184,0.6)',
-        }}
-      >
-        <Text size="xs" c="rgba(148,163,184,0.9)">
-          {label}
-        </Text>
-        <Text size="sm" fw={600} c={TEXT_MAIN}>
-          {value}
-        </Text>
-      </Box>
-    );
-  }
+      {/* End page wrapper */}
+    </Box>
+  );
+}
 
-  function PillBlock({ title, items }: { title: string; items: string[] }) {
-    return (
-      <Stack
-        gap={6}
-        p="md"
-        style={{
-          borderRadius: 16,
-          background: '#020617',
-          border: '1px solid rgba(31,41,55,0.9)',
-        }}
-      >
-        <Text size="xs" fw={600} tt="uppercase" c={ACCENT_SOFT} style={{ letterSpacing: 2 }}>
-          {title}
-        </Text>
-        {items.map((item) => (
-          <Text key={item} size="xs" c={TEXT_MUTED}>
-            {item}
-          </Text>
-        ))}
-      </Stack>
-    );
-  }
-
-  function StepCard({ step, title, description }: { step: string; title: string; description: string }) {
-    return (
-      <Stack
-        gap="sm"
-        p="lg"
-        style={{
-          background: '#020617',
-          borderRadius: 18,
-          border: '1px solid rgba(31,41,55,0.9)',
-        }}
-      >
-        <Text size="xs" fw={700} tt="uppercase" c={ACCENT_SOFT} style={{ letterSpacing: 3 }}>
-          Step {step}
-        </Text>
-        <Text fw={700} c={TEXT_MAIN}>
-          {title}
-        </Text>
+function FeatureCard({ feature }: { feature: Feature }) {
+  return (
+    <Box
+      component="article"
+      p="lg"
+      style={{
+        background:
+          'radial-gradient(circle at 0% 0%, rgba(255,180,71,0.18), transparent 60%), #020617',
+        borderRadius: 18,
+        border: '1px solid rgba(148,163,184,0.5)',
+        boxShadow: '0 18px 45px rgba(0,0,0,0.85)',
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
+      }}
+      onMouseEnter={(e: MouseEvent<HTMLDivElement>) => {
+        e.currentTarget.style.transform = 'translateY(-6px)';
+        e.currentTarget.style.boxShadow = '0 26px 70px rgba(0,0,0,0.95)';
+        e.currentTarget.style.borderColor = 'rgba(255,106,61,0.9)';
+      }}
+      onMouseLeave={(e: MouseEvent<HTMLDivElement>) => {
+        e.currentTarget.style.transform = 'none';
+        e.currentTarget.style.boxShadow = '0 18px 45px rgba(0,0,0,0.85)';
+        e.currentTarget.style.borderColor = 'rgba(148,163,184,0.5)';
+      }}
+    >
+      <Stack gap="sm">
+        <ThemeIcon
+          size={38}
+          radius="md"
+          style={{
+            background: 'rgba(255,106,61,0.12)',
+            color: ACCENT_SOFT,
+            alignSelf: 'flex-start',
+          }}
+        >
+          {feature.icon}
+        </ThemeIcon>
+        <Title order={4} size="h4" c={TEXT_MAIN}>
+          {feature.title}
+        </Title>
         <Text size="sm" c={TEXT_MUTED}>
+          {feature.description}
+        </Text>
+      </Stack>
+    </Box>
+  );
+}
+
+function Metric({ label, value }: { label: string; value: string }) {
+  return (
+    <Box
+      p="sm"
+      style={{
+        borderRadius: 12,
+        background: 'rgba(15,23,42,0.9)',
+        border: '1px solid rgba(148,163,184,0.6)',
+      }}
+    >
+      <Text size="xs" c="rgba(148,163,184,0.9)">
+        {label}
+      </Text>
+      <Text size="sm" fw={600} c={TEXT_MAIN}>
+        {value}
+      </Text>
+    </Box>
+  );
+}
+
+function PillBlock({ title, items }: { title: string; items: string[] }) {
+  return (
+    <Stack
+      gap={6}
+      p="md"
+      style={{
+        borderRadius: 16,
+        background: '#020617',
+        border: '1px solid rgba(31,41,55,0.9)',
+      }}
+    >
+      <Text size="xs" fw={600} tt="uppercase" c={ACCENT_SOFT} style={{ letterSpacing: 2 }}>
+        {title}
+      </Text>
+      {items.map((item) => (
+        <Text key={item} size="xs" c={TEXT_MUTED}>
+          {item}
+        </Text>
+      ))}
+    </Stack>
+  );
+}
+
+function StepCard({ step, title, description }: { step: string; title: string; description: string }) {
+  return (
+    <Stack
+      gap="sm"
+      p="lg"
+      style={{
+        background: '#020617',
+        borderRadius: 18,
+        border: '1px solid rgba(31,41,55,0.9)',
+      }}
+    >
+      <Text size="xs" fw={700} tt="uppercase" c={ACCENT_SOFT} style={{ letterSpacing: 3 }}>
+        Step {step}
+      </Text>
+      <Text fw={700} c={TEXT_MAIN}>
+        {title}
+      </Text>
+      <Text size="sm" c={TEXT_MUTED}>
+        {description}
+      </Text>
+    </Stack>
+  );
+}
+
+function TypingText({ text, size = 'sm', color }: { text: string; size?: string; color?: string }) {
+  return (
+    <Text size={size} c={color} style={{ maxWidth: 640 }}>
+      {text}
+    </Text>
+  );
+}
+
+function SectionHeader({ label, title, description }: { label: string; title: string; description?: string }) {
+  return (
+    <Stack gap={4} mb="xl">
+      <Text size="sm" fw={600} c={ACCENT_SOFT} tt="uppercase" style={{ letterSpacing: 3 }}>
+        {label}
+      </Text>
+      <Title order={2} size={32} fw={800} c={TEXT_MAIN}>
+        {title}
+      </Title>
+      {description && (
+        <Text size="sm" c={TEXT_MUTED} maw={560}>
           {description}
         </Text>
+      )}
+    </Stack>
+  );
+}
+
+function KioskDemo() {
+  return (
+    <Box
+      p="lg"
+      style={{
+        borderRadius: 20,
+        background:
+          'radial-gradient(circle at 0% 0%, rgba(255,180,71,0.14), transparent 55%), #020617',
+        border: '1px solid rgba(148,163,184,0.5)',
+      }}
+    >
+      <Stack gap="xs">
+        <Text size="xs" fw={600} c={ACCENT_SOFT} tt="uppercase" style={{ letterSpacing: 3 }}>
+          Kiosk &amp; table ordering
+        </Text>
+        <Text size="sm" c={TEXT_MUTED}>
+          Interactive demo placeholder — showcasing how guests scan, browse the menu, and pay
+          without waiting for a terminal.
+        </Text>
       </Stack>
-    );
-  }
+    </Box>
+  );
+}
 
