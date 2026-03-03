@@ -6,6 +6,7 @@ import { ApiHelpProvider } from '@contexts/ApiHelpContext';
 import PageLoading from '@components/loader/PageLoading';
 
 const LandingPage = lazy(() => import('@pages/landing/LandingPage'));
+const PitchDeckPage = lazy(() => import('@pages/pitch/PitchDeckPage'));
 const LoginPage = lazy(() => import('@pages/auth/LoginPage'));
 const RegisterPage = lazy(() => import('@pages/auth/RegisterPage'));
 const ForgotPasswordPage = lazy(() => import('@pages/auth/ForgotPasswordPage'));
@@ -30,6 +31,7 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<LandingPage />} />
+      <Route path="/pitch-deck" element={<PitchDeckPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
