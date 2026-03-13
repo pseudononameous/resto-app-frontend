@@ -62,15 +62,19 @@ export default function ThemeCustomizationTab() {
                 ]}
                 defaultValue="comfortable"
               />
-              <SegmentedControl
-                fullWidth
-                label="Menu style"
-                data={[
-                  { label: 'Categories on top', value: 'top-categories' },
-                  { label: 'Drawer menu', value: 'drawer' },
-                ]}
-                defaultValue="top-categories"
-              />
+              <Stack gap={4}>
+                <Text size="xs" fw={500} c="dimmed">
+                  Menu style
+                </Text>
+                <SegmentedControl
+                  fullWidth
+                  data={[
+                    { label: 'Categories on top', value: 'top-categories' },
+                    { label: 'Drawer menu', value: 'drawer' },
+                  ]}
+                  defaultValue="top-categories"
+                />
+              </Stack>
               <Switch label="Show background imagery" defaultChecked />
               <Switch label="Show badges for featured items" defaultChecked />
             </Stack>
@@ -84,15 +88,19 @@ export default function ThemeCustomizationTab() {
               <Text size="xs" c="dimmed">
                 Public ordering site for customers on desktop and mobile browsers.
               </Text>
-              <SegmentedControl
-                fullWidth
-                label="Menu style"
-                data={[
-                  { label: 'Grid', value: 'grid' },
-                  { label: 'List', value: 'list' },
-                ]}
-                defaultValue="grid"
-              />
+              <Stack gap={4}>
+                <Text size="xs" fw={500} c="dimmed">
+                  Menu style
+                </Text>
+                <SegmentedControl
+                  fullWidth
+                  data={[
+                    { label: 'Grid', value: 'grid' },
+                    { label: 'List', value: 'list' },
+                  ]}
+                  defaultValue="grid"
+                />
+              </Stack>
               <Switch label="Show hero banner on homepage" defaultChecked />
               <Switch label="Enable sticky cart summary" defaultChecked />
             </Stack>
@@ -106,15 +114,19 @@ export default function ThemeCustomizationTab() {
               <Text size="xs" c="dimmed">
                 In-store self-service kiosk used for walk-up ordering.
               </Text>
-              <SegmentedControl
-                fullWidth
-                label="Menu style"
-                data={[
-                  { label: 'Hero image first', value: 'hero' },
-                  { label: 'Category-first', value: 'categories' },
-                ]}
-                defaultValue="categories"
-              />
+              <Stack gap={4}>
+                <Text size="xs" fw={500} c="dimmed">
+                  Menu style
+                </Text>
+                <SegmentedControl
+                  fullWidth
+                  data={[
+                    { label: 'Hero image first', value: 'hero' },
+                    { label: 'Category-first', value: 'categories' },
+                  ]}
+                  defaultValue="categories"
+                />
+              </Stack>
               <Switch label="Show upsell suggestions" defaultChecked />
               <Switch label="Large touch targets" defaultChecked />
             </Stack>
