@@ -46,6 +46,8 @@ export default function DashboardPage() {
           <Button component={Link} to="/dashboard/reservations" variant="light" color="orange">Reservations</Button>
           <Button component={Link} to="/dashboard/waste-logs" variant="light" color="orange">Waste Logs</Button>
           <Button component={Link} to="/dashboard/deliveries" variant="light" color="orange">Deliveries</Button>
+          <Button component={Link} to="/dashboard/kiosk" variant="light" color="orange">Order Kiosk</Button>
+          <Button component={Link} to="/dashboard/shop" variant="light" color="orange">Shop</Button>
         </SimpleGrid>
       </Stack>
     </Paper>

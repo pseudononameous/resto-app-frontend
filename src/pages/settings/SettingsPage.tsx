@@ -10,6 +10,7 @@ import {
   IconReceiptTax,
   IconFileInvoice,
   IconTruck,
+  IconPalette,
 } from '@tabler/icons-react';
 import PageHeader from '@components/ui/PageHeader';
 import UserManagementTab from './UserManagementTab';
@@ -22,9 +23,12 @@ import PayoutsSettingsTab from './PayoutsSettingsTab';
 import TaxCenterSettingsTab from './TaxCenterSettingsTab';
 import BillingSettingsTab from './BillingSettingsTab';
 import CourierLogisticsSettingsTab from './CourierLogisticsSettingsTab';
+import ThemeOptionsTab from './ThemeOptionsTab';
+import ThemeCustomizationTab from './ThemeCustomizationTab';
 
 const TABS = [
   { value: 'account', label: 'Account', icon: IconUser },
+  { value: 'themes', label: 'Themes', icon: IconPalette },
   { value: 'integrations', label: 'Integrations', icon: IconPlug },
   { value: 'locations', label: 'Locations', icon: IconMapPin },
   { value: 'user-management', label: 'User Management', icon: IconUsers },
@@ -58,6 +62,10 @@ export default function SettingsPage() {
 
         <Tabs.Panel value="account" pt="md">
           <AccountSettingsTab />
+        </Tabs.Panel>
+        <Tabs.Panel value="themes" pt="md">
+          <ThemeOptionsTab />
+          <ThemeCustomizationTab />
         </Tabs.Panel>
         <Tabs.Panel value="integrations" pt="md">
           <IntegrationsSettingsTab />

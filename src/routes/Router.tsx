@@ -7,6 +7,7 @@ import PageLoading from '@components/loader/PageLoading';
 
 const LandingPage = lazy(() => import('@pages/landing/LandingPage'));
 const PitchDeckPage = lazy(() => import('@pages/pitch/PitchDeckPage'));
+const PresentationPage = lazy(() => import('@pages/pitch/PresentationPage'));
 const LoginPage = lazy(() => import('@pages/auth/LoginPage'));
 const RegisterPage = lazy(() => import('@pages/auth/RegisterPage'));
 const ForgotPasswordPage = lazy(() => import('@pages/auth/ForgotPasswordPage'));
@@ -26,12 +27,14 @@ const ReservationsPage = lazy(() => import('@pages/crud/ReservationsPage'));
 const KioskPage = lazy(() => import('@pages/kiosk/KioskPage'));
 const KitchenTicketsPage = lazy(() => import('@pages/crud/KitchenTicketsPage'));
 const SettingsPage = lazy(() => import('@pages/settings/SettingsPage'));
+const ShopPage = lazy(() => import('@pages/shop/ShopPage'));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<LandingPage />} />
       <Route path="/pitch-deck" element={<PitchDeckPage />} />
+      <Route path="/presentation" element={<PresentationPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
@@ -54,6 +57,7 @@ const router = createBrowserRouter(
           <Route path="/dashboard/kiosk" element={<KioskPage />} />
           <Route path="/dashboard/kitchen-tickets" element={<KitchenTicketsPage />} />
           <Route path="/dashboard/settings" element={<SettingsPage />} />
+          <Route path="/dashboard/shop" element={<ShopPage />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

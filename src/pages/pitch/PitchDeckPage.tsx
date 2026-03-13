@@ -116,7 +116,7 @@ export default function PitchDeckPage() {
               <ThemeIcon size={34} radius="md" style={{ background: 'linear-gradient(135deg,#fb923c,#ea580c)', boxShadow: '0 0 16px rgba(249,115,22,0.4)' }}>
                 <IconChefHat size={18} color="#050509" />
               </ThemeIcon>
-              <Text fw={800} size="lg" c={TEXT_MAIN}>RestoApp</Text>
+              <Text fw={800} size="lg" c={TEXT_MAIN}>OrderOp</Text>
             </Group>
             <Group gap="sm">
               <Button component={Link} to="/" leftSection={<IconArrowLeft size={14} />} variant="subtle" size="sm" style={{ color: TEXT_MUTED }}>
@@ -145,7 +145,7 @@ export default function PitchDeckPage() {
               <Text size="sm" fw={600} c={ACCENT_SOFT}>Pre-Seed Fundraising Deck · February 2026</Text>
             </Box>
             <Title order={1} fw={800} c={TEXT_MAIN} style={{ fontSize: 'clamp(3rem,8vw,5.5rem)', letterSpacing: -2, lineHeight: 1.0 }}>
-              RestoApp
+              OrderOp
             </Title>
             <Text size="xl" c={TEXT_MUTED} maw={560} style={{ lineHeight: 1.6 }}>
               Affordable technology to revolutionize F&amp;B, Retail and delivery.
@@ -165,7 +165,7 @@ export default function PitchDeckPage() {
           <Stack gap="xl">
             <Stack gap="sm">
               <SectionLabel>Our Vision</SectionLabel>
-              <SectionTitle>RestoApp is the unified operating system that empowers restaurants to own their entire digital experience.</SectionTitle>
+              <SectionTitle>OrderOp is the unified operating system that empowers restaurants to own their entire digital experience.</SectionTitle>
               <Text size="lg" c={TEXT_MUTED} maw={640}>
                 From ordering to payment, loyalty to analytics — all in one seamless platform.
               </Text>
@@ -272,7 +272,7 @@ export default function PitchDeckPage() {
           <Stack gap="xl">
             <Stack gap="sm" align="center" ta="center">
               <SectionLabel>The Solution</SectionLabel>
-              <SectionTitle maw={560}>RestoApp unifies the stack</SectionTitle>
+              <SectionTitle maw={560}>OrderOp unifies the stack</SectionTitle>
               <Text size="lg" c={TEXT_MUTED}>One platform. Complete control. Zero fragmentation.</Text>
             </Stack>
             <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="md">
@@ -334,7 +334,7 @@ export default function PitchDeckPage() {
           <Stack gap="xl">
             <Stack gap="sm">
               <SectionLabel>Operations Impact</SectionLabel>
-              <SectionTitle>How RestoApp transforms day-to-day restaurant operations</SectionTitle>
+              <SectionTitle>How OrderOp transforms day-to-day restaurant operations</SectionTitle>
             </Stack>
             <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md">
               {/* Traditional */}
@@ -358,9 +358,9 @@ export default function PitchDeckPage() {
                   ))}
                 </Stack>
               </Box>
-              {/* With RestoApp */}
+              {/* With OrderOp */}
               <Box p="xl" style={{ borderRadius: 20, background: 'rgba(249,115,22,0.06)', border: '1px solid rgba(249,115,22,0.3)' }}>
-                <Text fw={700} c={ACCENT_SOFT} mb="lg" size="lg">With RestoApp</Text>
+                <Text fw={700} c={ACCENT_SOFT} mb="lg" size="lg">With OrderOp</Text>
                 <Stack gap="md">
                   {[
                     { title: 'Minimal Staff Needed', desc: '90% reduction in server roles, focus on food prep & experience' },
@@ -554,7 +554,7 @@ export default function PitchDeckPage() {
                 </SimpleGrid>
                 <Box p="lg" style={{ borderRadius: 16, background: 'rgba(249,115,22,0.08)', border: '1px solid rgba(249,115,22,0.3)' }}>
                   <Text fw={700} c={ACCENT_SOFT} mb="xs">The Shopify Parallel</Text>
-                  <Text size="sm" c={TEXT_MUTED}>Shopify captured 10% of e-commerce. If RestoApp captures just 5% of restaurant tech, that's a <Text component="span" fw={700} c={TEXT_MAIN}>$2.6B opportunity</Text>.</Text>
+                  <Text size="sm" c={TEXT_MUTED}>Shopify captured 10% of e-commerce. If OrderOp captures just 5% of restaurant tech, that's a <Text component="span" fw={700} c={TEXT_MAIN}>$2.6B opportunity</Text>.</Text>
                 </Box>
               </Stack>
             </SimpleGrid>
@@ -577,7 +577,7 @@ export default function PitchDeckPage() {
               {[
                 { name: 'Toast / Square', color: 'rgba(239,68,68,0.15)', border: 'rgba(239,68,68,0.3)', textColor: 'rgba(248,113,113,0.9)', items: ['POS-centric thinking', 'Hardware lock-in', 'High upfront costs', 'Limited customization'], bad: true },
                 { name: 'DoorDash', color: 'rgba(239,68,68,0.1)', border: 'rgba(239,68,68,0.25)', textColor: 'rgba(248,113,113,0.9)', items: ['You don\'t own customer data', '30% commission', 'Zero data sharing', 'Delivery-only'], bad: true },
-                { name: 'RestoApp', color: 'rgba(249,115,22,0.1)', border: 'rgba(249,115,22,0.4)', textColor: ACCENT_SOFT, items: ['Unification layer', 'Software-first', 'Low-cost SaaS', 'Fully modular'], bad: false },
+                { name: 'OrderOp', color: 'rgba(249,115,22,0.1)', border: 'rgba(249,115,22,0.4)', textColor: ACCENT_SOFT, items: ['Unification layer', 'Software-first', 'Low-cost SaaS', 'Fully modular'], bad: false },
               ].map((comp) => (
                 <Box key={comp.name} p="xl" style={{ borderRadius: 20, background: comp.color, border: `1px solid ${comp.border}` }}>
                   <Text fw={800} c={comp.textColor} size="lg" mb="lg">{comp.name}</Text>
@@ -901,9 +901,9 @@ export default function PitchDeckPage() {
               <ThemeIcon size={28} radius="sm" style={{ background: 'linear-gradient(135deg,#fb923c,#ea580c)' }}>
                 <IconChefHat size={16} color="#050509" />
               </ThemeIcon>
-              <Text fw={700} size="sm" c={TEXT_MAIN}>RestoApp</Text>
+              <Text fw={700} size="sm" c={TEXT_MAIN}>OrderOp</Text>
             </Group>
-            <Text size="xs" c={TEXT_MUTED}>© 2026 RestoApp · Pre-Seed Fundraising Deck · February 2026</Text>
+            <Text size="xs" c={TEXT_MUTED}>© 2026 OrderOp · Pre-Seed Fundraising Deck · February 2026</Text>
           </Group>
         </Container>
       </Box>

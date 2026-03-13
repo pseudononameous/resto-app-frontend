@@ -82,3 +82,16 @@ export const rolesApi = {
 export const permissionsApi = {
   list: (params?: Record<string, unknown>) => axios.get('/v1/permissions', { params }),
 };
+
+/** App Preview (Turn your website into an app). Uses OpenAI on backend — same pattern as intellect-edge. */
+export const appPreviewApi = {
+  generate: (formData: FormData) =>
+    axios.post<{ data: { preview_image_url?: string; preview_image_base64?: string } }>(
+      '/v1/app-preview',
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        timeout: 120000,
+      }
+    ),
+};

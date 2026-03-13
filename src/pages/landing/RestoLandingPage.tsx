@@ -13,7 +13,7 @@ import {
 } from '@mantine/core';
 import { IconChartBar, IconDevices, IconReceipt2, IconUsers, IconChefHat } from '@tabler/icons-react';
 
-// RestoApp brand-inspired palette
+// OrderOp brand-inspired palette
 const EMERALD = '#059669';
 const EMERALD_DARK = '#064e3b';
 const AMBER = '#f59e0b';
@@ -64,7 +64,7 @@ export default function RestoLandingPage() {
                   },
                 }}
               >
-                RestoApp Commerce Ecosystem
+                OrderOp Commerce Ecosystem
               </Badge>
               <Title
                 order={1}
@@ -79,7 +79,7 @@ export default function RestoLandingPage() {
                 The Operating System for Modern Restaurants.
               </Title>
               <Text size="lg" c="dimmed" maw={520}>
-                RestoApp unifies point-of-sale, kitchen operations, stock, purchasing, and analytics into one real-time
+                OrderOp unifies point-of-sale, kitchen operations, stock, purchasing, and analytics into one real-time
                 commerce platform—built for multi-branch brands and fast-growing concepts.
               </Text>
               <Group gap="md" mt="sm" wrap="wrap">
@@ -191,7 +191,7 @@ export default function RestoLandingPage() {
 
                 <Text size="xs" c="rgba(148,163,184,0.9)">
                   Every tap at the counter, every ticket in the kitchen, every SKU in stock—captured and reconciled in
-                  real time by RestoApp.
+                  real time by OrderOp.
                 </Text>
               </Stack>
             </Box>
@@ -305,13 +305,13 @@ export default function RestoLandingPage() {
           >
             <Stack gap="lg" align="center" ta="center">
               <Text size="sm" fw={600} c="#bbf7d0" tt="uppercase" style={{ letterSpacing: 3 }}>
-                See RestoApp in action
+                See OrderOp in action
               </Text>
               <Title order={2} c="white" fw={800} style={{ letterSpacing: '-0.03em' }}>
                 Schedule a working session with our team.
               </Title>
               <Text size="md" c="rgba(226,232,240,0.9)" maw={520}>
-                In a 45-minute live session, we&apos;ll walk through your current stack and map how RestoApp can
+                In a 45-minute live session, we&apos;ll walk through your current stack and map how OrderOp can
                 consolidate tools, reduce leakages, and prepare you for new locations.
               </Text>
               <Group gap="md" wrap="wrap" justify="center">
@@ -326,7 +326,7 @@ export default function RestoLandingPage() {
                     },
                   }}
                   component="a"
-                  href="mailto:hello@restoapp.local?subject=RestoApp%20Demo%20Request"
+                  href="mailto:hello@restoapp.local?subject=OrderOp%20Demo%20Request"
                 >
                   Request a demo
                 </Button>
@@ -354,7 +354,7 @@ export default function RestoLandingPage() {
         <Container size="xl">
           <Group justify="space-between" align="center" wrap="wrap">
             <Text size="sm" c="rgba(148,163,184,0.9)">
-              © {new Date().getFullYear()} RestoApp Commerce Ecosystem. All rights reserved.
+              © {new Date().getFullYear()} OrderOp Commerce Ecosystem. All rights reserved.
             </Text>
             <Group gap="md">
               <Text size="xs" c="rgba(148,163,184,0.9)">

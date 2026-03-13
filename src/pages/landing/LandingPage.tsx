@@ -2,16 +2,21 @@ import {
   Box,
   Button,
   Container,
+  Divider,
+  FileInput,
   Group,
   SimpleGrid,
   Stack,
   Text,
+  Textarea,
+  TextInput,
   ThemeIcon,
   Title,
 } from '@mantine/core';
 import type { MouseEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { appPreviewApi } from '@services/api';
 import {
   IconQrcode,
   IconDeviceTablet,
@@ -30,6 +35,10 @@ import {
   IconAlertTriangle,
   IconCoin,
   IconCheck,
+  IconDownload,
+  IconLink,
+  IconUpload,
+  IconSparkles,
 } from '@tabler/icons-react';
 
 const CANVAS = '#050509';
@@ -582,6 +591,250 @@ function PulseDot() {
   );
 }
 
+/* ─── App Preview (Turn Your Website Into an App) ─── */
+function AppPreviewSection() {
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [websiteUrl, setWebsiteUrl] = useState('');
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [stylePrompt, setStylePrompt] = useState('');
+  const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGenerated, setIsGenerated] = useState(false);
+
+  const hasContentSource = websiteUrl.trim() !== '' || uploadedFiles.length > 0;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!hasContentSource) return;
+    setIsSubmitting(true);
+
+    const formData = new FormData();
+    formData.append('name', fullName.trim());
+    formData.append('email', email.trim());
+    if (phone.trim()) formData.append('phone', phone.trim());
+    formData.append('website_url', websiteUrl.trim());
+    if (stylePrompt.trim()) formData.append('style_prompt', stylePrompt.trim());
+    uploadedFiles.forEach((file) => formData.append('files[]', file));
+
+    try {
+      const res = await appPreviewApi.generate(formData);
+      const payload = (res.data as { data?: { preview_image_url?: string; preview_image_base64?: string } })?.data;
+      const url = payload?.preview_image_url ?? (payload?.preview_image_base64 ? `data:image/png;base64,${payload.preview_image_base64}` : null);
+      if (url) {
+        setPreviewImageUrl(url);
+        setIsGenerated(true);
+      }
+    } catch {
+      // Error notification shown by axios interceptor
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const inputStyles = {
+    styles: {
+      input: {
+        backgroundColor: CARD_BG,
+        borderColor: BORDER,
+        color: TEXT_MAIN,
+      },
+    },
+  };
+
+  const { ref } = useInView(0.1);
+
+  if (isGenerated && previewImageUrl) {
+    return (
+      <Box
+        id="app-preview"
+        py={96}
+        style={{
+          borderTop: `1px solid ${BORDER}`,
+          background: `linear-gradient(180deg, rgba(249,115,22,0.06) 0%, transparent 50%), ${CANVAS}`,
+        }}
+      >
+        <Container size="md">
+          <FadeIn>
+            <Stack gap="xl" align="center" ta="center">
+              <Box
+                style={{
+                  borderRadius: 24,
+                  overflow: 'hidden',
+                  border: `2px solid ${BORDER}`,
+                  boxShadow: '0 24px 48px rgba(0,0,0,0.4)',
+                  maxWidth: 320,
+                }}
+              >
+                <img
+                  src={previewImageUrl}
+                  alt="Your mobile app preview"
+                  style={{ display: 'block', width: '100%', height: 'auto', verticalAlign: 'top' }}
+                />
+              </Box>
+              <Text size="lg" fw={600} c={TEXT_MAIN}>
+                Ready to bring this to life?
+              </Text>
+              <Text size="sm" c={TEXT_MUTED} maw={400}>
+                Get your app built with OrderOp — QR ordering, payments, loyalty, and more.
+              </Text>
+              <Button
+                component={Link}
+                to="/register"
+                size="xl"
+                radius="md"
+                style={{
+                  background: 'linear-gradient(135deg, #fb923c 0%, #f97316 50%, #ea580c 100%)',
+                  color: '#050509',
+                  fontWeight: 700,
+                  paddingInline: 40,
+                  fontSize: '1rem',
+                }}
+              >
+                Try Your App In Action
+              </Button>
+            </Stack>
+          </FadeIn>
+        </Container>
+      </Box>
+    );
+  }
+
+  return (
+    <Box
+      id="app-preview"
+      ref={ref}
+      py={96}
+      style={{
+        borderTop: `1px solid ${BORDER}`,
+        background: `linear-gradient(180deg, rgba(249,115,22,0.06) 0%, transparent 50%), ${CANVAS}`,
+      }}
+    >
+      <Container size="lg">
+        <Stack gap={48}>
+          <FadeIn>
+            <Stack gap="md" align="center" ta="center">
+              <Text size="sm" fw={600} c={ACCENT_SOFT} tt="uppercase" style={{ letterSpacing: 3 }}>
+                Preview
+              </Text>
+              <Title
+                order={2}
+                fw={800}
+                c={TEXT_MAIN}
+                style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', letterSpacing: -1, maxWidth: 560 }}
+              >
+                Turn Your Website Into an App
+              </Title>
+              <Text size="lg" c={TEXT_MUTED} maw={520}>
+                Paste your website link or upload your content and instantly preview your mobile app interface.
+              </Text>
+            </Stack>
+          </FadeIn>
+
+          <FadeIn delay={100}>
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              style={{
+                maxWidth: 560,
+                margin: '0 auto',
+                borderRadius: 20,
+                background: CARD_BG,
+                border: `1px solid ${BORDER}`,
+                padding: 32,
+              }}
+            >
+              <Stack gap="lg">
+                <Text size="sm" fw={600} c={TEXT_MUTED} tt="uppercase" style={{ letterSpacing: 2 }}>
+                  Your information
+                </Text>
+                <TextInput
+                  label="Full Name"
+                  placeholder="Jane Smith"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.currentTarget.value)}
+                  required
+                  {...inputStyles}
+                />
+                <TextInput
+                  label="Email Address"
+                  type="email"
+                  placeholder="jane@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.currentTarget.value)}
+                  required
+                  {...inputStyles}
+                />
+                <TextInput
+                  label="Phone Number (optional)"
+                  type="tel"
+                  placeholder="+1 (555) 000-0000"
+                  value={phone}
+                  onChange={(e) => setPhone(e.currentTarget.value)}
+                  {...inputStyles}
+                />
+
+                <Divider my="sm" color={BORDER} label="Content source" labelPosition="center" />
+
+                <TextInput
+                  label="Website URL"
+                  placeholder="https://your-website.com"
+                  value={websiteUrl}
+                  onChange={(e) => setWebsiteUrl(e.currentTarget.value)}
+                  leftSection={<IconLink size={16} color={TEXT_MUTED} />}
+                  {...inputStyles}
+                />
+
+                <Text size="xs" c={TEXT_MUTED} ta="center">
+                  — or —
+                </Text>
+
+                <FileInput
+                  label="Upload files"
+                  placeholder="Image, PDF, CSV, DOC"
+                  accept="image/*,.pdf,.csv,.doc,.docx"
+                  multiple
+                  value={uploadedFiles}
+                  onChange={setUploadedFiles}
+                  leftSection={<IconUpload size={16} color={TEXT_MUTED} />}
+                  {...inputStyles}
+                />
+
+                <Textarea
+                  label="Describe the style you want (optional)"
+                  placeholder="e.g. minimalist, premium, iOS style, clean layout, modern design"
+                  value={stylePrompt}
+                  onChange={(e) => setStylePrompt(e.currentTarget.value)}
+                  minRows={2}
+                  {...inputStyles}
+                />
+
+                <Button
+                  type="submit"
+                  size="xl"
+                  radius="md"
+                  disabled={!hasContentSource || isSubmitting}
+                  loading={isSubmitting}
+                  leftSection={!isSubmitting ? <IconSparkles size={20} /> : undefined}
+                  style={{
+                    background: 'linear-gradient(135deg, #fb923c 0%, #f97316 50%, #ea580c 100%)',
+                    color: '#050509',
+                    fontWeight: 700,
+                    marginTop: 8,
+                  }}
+                >
+                  Generate My App Preview
+                </Button>
+              </Stack>
+            </Box>
+          </FadeIn>
+        </Stack>
+      </Container>
+    </Box>
+  );
+}
+
 /* ─── Main ─── */
 export default function LandingPage() {
   return (
@@ -621,7 +874,7 @@ export default function LandingPage() {
                 <IconChefHat size={20} color="#050509" />
               </ThemeIcon>
               <Text fw={800} size="lg" c={TEXT_MAIN} style={{ letterSpacing: -0.5 }}>
-                RestoApp
+                OrderOp
               </Text>
             </Group>
 
@@ -730,7 +983,7 @@ export default function LandingPage() {
               maw={540}
               style={{ animation: 'fade-up 0.7s ease 0.2s both' }}
             >
-              RestoApp is the unified operating system that empowers restaurants to own their entire
+              OrderOp is the unified operating system that empowers restaurants to own their entire
               digital experience — from ordering to payment, loyalty to analytics.
             </Text>
 
@@ -885,7 +1138,7 @@ export default function LandingPage() {
                   Everything you need to build a production-ready restaurant OS
                 </Title>
                 <Text size="lg" c={TEXT_MUTED} maw={560}>
-                  RestoApp abstracts the technical complexity so operators can focus on what matters —
+                  OrderOp abstracts the technical complexity so operators can focus on what matters —
                   running great restaurants and protecting their margins.
                 </Text>
               </Stack>
@@ -994,6 +1247,117 @@ export default function LandingPage() {
         </Container>
       </Box>
 
+      {/* ── Featured: Mobile App ── */}
+      <Box
+        id="mobile-app"
+        py={96}
+        style={{
+          borderTop: `1px solid ${BORDER}`,
+          background: `radial-gradient(ellipse 80% 70% at 50% 50%, rgba(249,115,22,0.12) 0%, rgba(249,115,22,0.02) 50%, transparent 70%), ${CANVAS}`,
+        }}
+      >
+        <Container size="xl">
+          <SimpleGrid cols={{ base: 1, md: 2 }} spacing={64} style={{ alignItems: 'center' }}>
+            <FadeIn direction="left">
+              <Stack gap="xl">
+                <Box>
+                  <Text size="sm" fw={600} c={ACCENT_SOFT} tt="uppercase" mb="xs" style={{ letterSpacing: 3 }}>
+                    Mobile App
+                  </Text>
+                  <Title
+                    order={2}
+                    fw={800}
+                    c={TEXT_MAIN}
+                    style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', letterSpacing: -0.8, lineHeight: 1.15 }}
+                  >
+                    OrderOp in your pocket
+                  </Title>
+                </Box>
+                <Text size="md" c={TEXT_MUTED} maw={480}>
+                  Run your restaurant from anywhere. The OrderOp mobile app puts orders, menus, and
+                  loyalty at your fingertips — no desk required.
+                </Text>
+                <Stack gap="sm">
+                  {[
+                    'View and manage orders on the go',
+                    'Update menus and availability in real time',
+                    'Push promos and rewards to your customers',
+                  ].map((item) => (
+                    <Group key={item} gap="sm">
+                      <ThemeIcon size={24} radius="xl" style={{ background: 'rgba(249,115,22,0.15)', color: ACCENT_SOFT }}>
+                        <IconCheck size={14} />
+                      </ThemeIcon>
+                      <Text size="sm" c={TEXT_MAIN}>{item}</Text>
+                    </Group>
+                  ))}
+                </Stack>
+                <Button
+                  component="a"
+                  href="https://drive.google.com/file/d/1VDtMjFfaoNIq1vPOzx6z_4OypIw3_mQA/view?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  size="xl"
+                  radius="md"
+                  leftSection={<IconDownload size={22} />}
+                  style={{
+                    background: 'linear-gradient(135deg, #fb923c 0%, #f97316 50%, #ea580c 100%)',
+                    color: '#050509',
+                    fontWeight: 700,
+                    paddingInline: 36,
+                    width: 'fit-content',
+                    boxShadow: '0 4px 24px rgba(249,115,22,0.35)',
+                  }}
+                >
+                  Download the app
+                </Button>
+              </Stack>
+            </FadeIn>
+            <FadeIn direction="right" delay={150}>
+              <Box
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '100%',
+                  minHeight: 600,
+                }}
+              >
+                <Box
+                  style={{
+                    borderRadius: 32,
+                    overflow: 'hidden',
+                    background: '#0a0a0a',
+                    boxShadow: '0 25px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04)',
+                    width: 280,
+                    aspectRatio: '9/16',
+                    maxHeight: 500,
+                    position: 'relative',
+                  }}
+                >
+                  <Box
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <iframe
+                      src="https://drive.google.com/file/d/1_NUfeYNraGMzoyPbKGupvy_GJGOrzEyd/preview"
+                      title="OrderOp mobile app demo"
+                      allow="autoplay; fullscreen"
+                      style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', width: '250%', height: '100%', border: 'none' }}
+                    />
+                  </Box>
+                </Box>
+              </Box>
+            </FadeIn>
+          </SimpleGrid>
+        </Container>
+      </Box>
+
       {/* ── Use Cases ── */}
       <Box id="use-cases" py={96}>
         <Container size="xl">
@@ -1009,7 +1373,7 @@ export default function LandingPage() {
                   Built for real restaurant problems
                 </Title>
                 <Text size="lg" c={TEXT_MUTED} maw={540}>
-                  From fast-casual to ghost kitchens, see how operators use RestoApp to automate their
+                  From fast-casual to ghost kitchens, see how operators use OrderOp to automate their
                   most important workflows.
                 </Text>
               </Stack>
@@ -1125,7 +1489,7 @@ export default function LandingPage() {
                   The Shopify Parallel
                 </Text>
                 <Text size="md" c={TEXT_MUTED}>
-                  Shopify captured 10% of e-commerce. If RestoApp captures just 5% of restaurant tech,
+                  Shopify captured 10% of e-commerce. If OrderOp captures just 5% of restaurant tech,
                   that&apos;s a $2.6B opportunity.
                 </Text>
                 <Stack gap="sm" mt="sm">
@@ -1228,6 +1592,9 @@ export default function LandingPage() {
         </Container>
       </Box>
 
+      {/* ── Turn Your Website Into an App (lead capture + preview) ── */}
+      <AppPreviewSection />
+
       {/* ── Final CTA ── */}
       <Box
         id="contact"
@@ -1249,7 +1616,7 @@ export default function LandingPage() {
                 c={TEXT_MAIN}
                 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', letterSpacing: -1, maxWidth: 560 }}
               >
-                See RestoApp working with your data.
+                See OrderOp working with your data.
               </Title>
               <Text size="lg" c={TEXT_MUTED} maw={480}>
                 A short call where we plug your real operations into a live workspace — no slides.
@@ -1299,10 +1666,10 @@ export default function LandingPage() {
               <ThemeIcon size={28} radius="sm" style={{ background: 'linear-gradient(135deg, #fb923c, #ea580c)' }}>
                 <IconChefHat size={16} color="#050509" />
               </ThemeIcon>
-              <Text fw={700} size="sm" c={TEXT_MAIN}>RestoApp</Text>
+              <Text fw={700} size="sm" c={TEXT_MAIN}>OrderOp</Text>
             </Group>
             <Text size="xs" c={TEXT_MUTED}>
-              © 2026 RestoApp · Affordable technology for F&B, retail, and delivery
+              © 2026 OrderOp · Affordable technology for F&B, retail, and delivery
             </Text>
           </Group>
         </Container>
