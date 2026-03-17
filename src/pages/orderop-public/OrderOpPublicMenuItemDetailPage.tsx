@@ -5,6 +5,13 @@ import { orderOpPublicApi } from "@services/api";
 import { Box, Button, Card, Group, Image, Loader, Modal, Paper, Stack, Text, TextInput, Textarea, Title } from "@mantine/core";
 import { IconArrowLeft, IconPhoto, IconTrash } from "@tabler/icons-react";
 
+const isProbablyDomain = (value: string) => {
+  const v = value.trim();
+  if (!v) return false;
+  if (/\s/.test(v)) return false;
+  return v.includes(".");
+};
+
 type MenuProfile = {
   id: number;
   restaurant_id: number | null;
@@ -16,6 +23,7 @@ type MenuProfile = {
   price: number | null;
   ingredients: string | null;
   menu_item_image?: string | null;
+  raw_payload?: Record<string, any> | null;
 };
 
 export default function OrderOpPublicMenuItemDetailPage() {
@@ -95,6 +103,14 @@ export default function OrderOpPublicMenuItemDetailPage() {
     );
   }
 
+  const rawName = item.raw_payload?.name ?? item.raw_payload?.["\ufeffname"];
+  const displayName =
+    (item.name && isProbablyDomain(item.name) && typeof rawName === "string" && rawName.trim()
+      ? rawName.trim()
+      : item.name) ||
+    (typeof rawName === "string" ? rawName.trim() : "") ||
+    `Menu item #${item.id}`;
+
   const banner = item.menu_item_image ?? null;
   const hasUnsavedChanges =
     form.name !== (item.name ?? "") ||
@@ -118,7 +134,7 @@ export default function OrderOpPublicMenuItemDetailPage() {
       <Stack gap="lg">
         <Paper withBorder radius="md" p={0} style={{ overflow: "hidden" }}>
           {banner ? (
-            <Image src={banner} alt={item.name ?? ""} h={220} fit="cover" />
+            <Image src={banner} alt={displayName} h={220} fit="cover" />
           ) : (
             <Box
               h={220}
@@ -140,7 +156,7 @@ export default function OrderOpPublicMenuItemDetailPage() {
           )}
 
           <Box p="md">
-            <Title order={3}>{item.name || `Menu item #${item.id}`}</Title>
+            <Title order={3}>{displayName}</Title>
             <Text size="sm" c="dimmed">
               {item.restaurant_name || "-"} • {item.category || "-"} {item.protein_type ? `• ${item.protein_type}` : ""}
             </Text>

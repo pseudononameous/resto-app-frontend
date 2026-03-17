@@ -15,7 +15,23 @@ type MenuItemRow = {
   price: number | null;
   ingredients: string | null;
   menu_item_image?: string | null;
+  raw_payload?: Record<string, any> | null;
   created_at: string;
+};
+
+const isProbablyDomain = (value: string) => {
+  const v = value.trim();
+  if (!v) return false;
+  if (/\s/.test(v)) return false;
+  return v.includes(".");
+};
+
+const menuItemDisplayName = (row: MenuItemRow) => {
+  const rawName = row.raw_payload?.name ?? row.raw_payload?.["\ufeffname"];
+  if (row.name && isProbablyDomain(row.name) && typeof rawName === "string" && rawName.trim()) {
+    return rawName.trim();
+  }
+  return row.name || (typeof rawName === "string" ? rawName.trim() : "") || `Menu item #${row.id}`;
 };
 
 type Restaurant = {
@@ -255,7 +271,7 @@ export default function MenuProfileMenuListPage() {
                       fw={600}
                       onClick={() => navigate(`/dashboard/orderop-manual-ai/menu/${restaurantId}/item/${row.id}`)}
                     >
-                      {row.name || `Menu item #${row.id}`}
+                      {menuItemDisplayName(row)}
                     </Anchor>
                   </Table.Td>
                   <Table.Td><Text size="sm" lineClamp={3}>{row.description || "-"}</Text></Table.Td>

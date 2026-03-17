@@ -3,6 +3,22 @@ import { useNavigate, useParams } from "react-router-dom";
 import { orderOpPublicApi } from "@services/api";
 import { Anchor, Box, Card, Group, Image, Loader, Stack, Table, Text, Title } from "@mantine/core";
 
+const isProbablyDomain = (value: string) => {
+  const v = value.trim();
+  if (!v) return false;
+  if (/\s/.test(v)) return false;
+  // simple heuristic: contains a dot and no spaces, looks like a domain/host
+  return v.includes(".");
+};
+
+const menuItemDisplayName = (row: MenuItemRow) => {
+  const rawName = row.raw_payload?.name ?? row.raw_payload?.["\ufeffname"];
+  if (row.name && isProbablyDomain(row.name) && typeof rawName === "string" && rawName.trim()) {
+    return rawName.trim();
+  }
+  return row.name || (typeof rawName === "string" ? rawName.trim() : "") || `Menu item #${row.id}`;
+};
+
 type MenuItemRow = {
   id: number;
   name: string | null;
@@ -12,6 +28,7 @@ type MenuItemRow = {
   price: number | null;
   ingredients: string | null;
   menu_item_image?: string | null;
+  raw_payload?: Record<string, any> | null;
   created_at: string;
 };
 
@@ -45,6 +62,29 @@ export default function OrderOpPublicMenuListPage() {
       <Text size="sm" c="dimmed" mb="md">
         Live menu preview (public).
       </Text>
+
+      {restaurant && (
+        <Card withBorder radius="md" mb="md">
+          <Group justify="space-between" align="flex-start">
+            <Box>
+              <Text fw={600}>{restaurant.restaurant_name || restaurant.name}</Text>
+              {restaurant.website_url ? (
+                <Text size="xs" c="dimmed">
+                  {restaurant.website_url}
+                </Text>
+              ) : null}
+            </Box>
+            <Box ta="right">
+              <Text size="xs" c="dimmed">
+                {restaurant.cuisine_type || "-"}
+              </Text>
+              <Text size="xs" c="dimmed">
+                {restaurant.location || "-"}
+              </Text>
+            </Box>
+          </Group>
+        </Card>
+      )}
 
       <Card withBorder radius="md">
         {isLoading || isLoadingRestaurant || !rows ? (
@@ -100,7 +140,7 @@ export default function OrderOpPublicMenuListPage() {
                       fw={600}
                       onClick={() => navigate(`/orderop/menu/${rid}/item/${row.id}`)}
                     >
-                      {row.name || `Menu item #${row.id}`}
+                      {menuItemDisplayName(row)}
                     </Anchor>
                   </Table.Td>
                   <Table.Td>
