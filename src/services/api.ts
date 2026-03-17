@@ -67,6 +67,21 @@ export const crudApi = {
   reservations: base('reservations'),
   wasteLogs: base('waste-logs'),
   deliveries: base('deliveries'),
+  // Secondary database (OrderOp AI manual ingestion)
+  restaurants: base('restaurants'),
+  menuProfiles: {
+    ...base('menu-profiles'),
+    import: (formData: FormData) =>
+      axios.post('/v1/menu-profiles/import', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }),
+    importByRestaurant: (restaurantId: number, formData: FormData) =>
+      axios.post(`/v1/restaurants/${restaurantId}/menu/import`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }),
+  },
+  generatedImages: base('generated-images'),
+  designAssets: base('design-assets'),
 };
 
 export const usersApi = {
@@ -94,4 +109,28 @@ export const appPreviewApi = {
         timeout: 120000,
       }
     ),
+};
+
+/** OrderOp AI ingestion: scrape restaurant website and build a structured restaurant context profile. */
+export const orderOpAiApi = {
+  preview: (payload: { website_url: string }) =>
+    axios.post<{ data: { text: string } }>('/v1/orderop-ai/preview', payload, {
+      timeout: 120000,
+    }),
+  ingest: (payload: { website_url: string }) =>
+    axios.post<{ data: { profile: Record<string, any> } }>('/v1/orderop-ai/ingest', payload, {
+      timeout: 120000,
+    }),
+};
+
+export const orderOpUploadApi = {
+  uploadImage: (formData: FormData) =>
+    axios.post<{ data: { url: string; path: string } }>('/v1/uploads/orderop/image', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }),
+};
+
+export const orderOpPublicApi = {
+  createRestaurantFromWebsite: (payload: { website_url: string; name?: string }) =>
+    axios.post('/v1/orderop/restaurants', payload),
 };

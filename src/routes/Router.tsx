@@ -6,6 +6,7 @@ import { ApiHelpProvider } from '@contexts/ApiHelpContext';
 import PageLoading from '@components/loader/PageLoading';
 
 const LandingPage = lazy(() => import('@pages/landing/LandingPage'));
+const OrderOpAiPage = lazy(() => import('@pages/landing/OrderOpAiPage'));
 const PitchDeckPage = lazy(() => import('@pages/pitch/PitchDeckPage'));
 const PresentationPage = lazy(() => import('@pages/pitch/PresentationPage'));
 const LoginPage = lazy(() => import('@pages/auth/LoginPage'));
@@ -28,11 +29,16 @@ const KioskPage = lazy(() => import('@pages/kiosk/KioskPage'));
 const KitchenTicketsPage = lazy(() => import('@pages/crud/KitchenTicketsPage'));
 const SettingsPage = lazy(() => import('@pages/settings/SettingsPage'));
 const ShopPage = lazy(() => import('@pages/shop/ShopPage'));
+const OrderOpManualAiPage = lazy(() => import('@pages/orderop/OrderOpManualAiPage'));
+const MenuProfileMenuListPage = lazy(() => import('@pages/orderop/MenuProfileMenuListPage'));
+const MenuProfileDesignAssetsPage = lazy(() => import('@pages/orderop/MenuProfileDesignAssetsPage'));
+const MenuProfileGeneratedImagesPage = lazy(() => import('@pages/orderop/MenuProfileGeneratedImagesPage'));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<LandingPage />} />
+      <Route path="/orderop-ai" element={<OrderOpAiPage />} />
       <Route path="/pitch-deck" element={<PitchDeckPage />} />
       <Route path="/presentation" element={<PresentationPage />} />
       <Route path="/login" element={<LoginPage />} />
@@ -56,6 +62,10 @@ const router = createBrowserRouter(
           <Route path="/dashboard/reservations" element={<ReservationsPage />} />
           <Route path="/dashboard/kiosk" element={<KioskPage />} />
           <Route path="/dashboard/kitchen-tickets" element={<KitchenTicketsPage />} />
+          <Route path="/dashboard/orderop-manual-ai" element={<OrderOpManualAiPage />} />
+          <Route path="/dashboard/orderop-manual-ai/menu/:id" element={<MenuProfileMenuListPage />} />
+          <Route path="/dashboard/orderop-manual-ai/design-assets/:id" element={<MenuProfileDesignAssetsPage />} />
+          <Route path="/dashboard/orderop-manual-ai/generated-images/:id" element={<MenuProfileGeneratedImagesPage />} />
           <Route path="/dashboard/settings" element={<SettingsPage />} />
           <Route path="/dashboard/shop" element={<ShopPage />} />
         </Route>

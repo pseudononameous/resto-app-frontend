@@ -1,7 +1,7 @@
 import { AppShell as MantineAppShell, Burger, Group, Stack, NavLink, UnstyledButton, Box, Text, ThemeIcon, Menu, Button, Tooltip, Select, Paper, ActionIcon, useMantineColorScheme } from "@mantine/core";
 import { useDisclosure, useViewportSize } from "@mantine/hooks";
 import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
-import { IconLogout, IconUser, IconLayoutDashboard, IconBooks, IconCode, IconMapPin, IconPackage, IconMenu2, IconClipboardList, IconUsers, IconTruckDelivery, IconCalendar, IconCategory, IconStack2, IconDeviceDesktop, IconTicket, IconSun, IconMoon, IconSettings } from "@tabler/icons-react";
+import { IconLogout, IconUser, IconLayoutDashboard, IconBooks, IconCode, IconMapPin, IconPackage, IconMenu2, IconClipboardList, IconUsers, IconTruckDelivery, IconCalendar, IconCategory, IconStack2, IconDeviceDesktop, IconTicket, IconSun, IconMoon, IconSettings, IconSparkles } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { useApiHelp } from "@contexts/ApiHelpContext";
 import { useStoreContext, StoreProvider } from "@contexts/StoreContext";
@@ -30,6 +30,7 @@ const NAV: NavEntry[] = [
   { to: "/dashboard/customers", label: "Customers", icon: IconUsers },
   { to: "/dashboard/deliveries", label: "Deliveries", icon: IconTruckDelivery },
   { to: "/dashboard/reservations", label: "Reservations", icon: IconCalendar },
+  { to: "/dashboard/orderop-manual-ai", label: "OrderOP Manual AI", icon: IconSparkles },
   { to: "/dashboard/settings", label: "Settings", icon: IconSettings },
 ];
 
