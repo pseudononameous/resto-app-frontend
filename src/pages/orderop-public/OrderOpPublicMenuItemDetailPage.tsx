@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { orderOpPublicApi } from "@services/api";
-import { Box, Button, Card, Group, Image, Loader, Modal, Paper, Stack, Text, TextInput, Textarea, Title } from "@mantine/core";
+import { Box, Button, Card, Group, Image, Loader, Modal, Paper, SimpleGrid, Stack, Text, TextInput, Textarea, Title } from "@mantine/core";
 import { IconArrowLeft, IconPhoto, IconTrash } from "@tabler/icons-react";
 
 const isProbablyDomain = (value: string) => {
@@ -26,6 +26,15 @@ type MenuProfile = {
   raw_payload?: Record<string, any> | null;
 };
 
+type Restaurant = {
+  id: number;
+  name: string;
+  website_url: string | null;
+  restaurant_name?: string | null;
+  cuisine_type?: string | null;
+  location?: string | null;
+};
+
 export default function OrderOpPublicMenuItemDetailPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -41,6 +50,12 @@ export default function OrderOpPublicMenuItemDetailPage() {
     queryKey: ["public-menu-profile", itemId],
     queryFn: async () => (await orderOpPublicApi.getMenuProfile(itemId)).data?.data as MenuProfile,
     enabled: Number.isFinite(itemId),
+  });
+
+  const { data: restaurant } = useQuery({
+    queryKey: ["public-restaurant", rid],
+    queryFn: async () => (await orderOpPublicApi.getRestaurant(rid)).data?.data as Restaurant,
+    enabled: Number.isFinite(rid),
   });
 
   const initialForm = useMemo(() => {
@@ -103,7 +118,10 @@ export default function OrderOpPublicMenuItemDetailPage() {
     );
   }
 
-  const rawName = item.raw_payload?.name ?? item.raw_payload?.["\ufeffname"];
+  const rawName =
+    item.raw_payload?.name ??
+    item.raw_payload?.["menu name"] ??
+    item.raw_payload?.["\ufeffname"];
   const displayName =
     (item.name && isProbablyDomain(item.name) && typeof rawName === "string" && rawName.trim()
       ? rawName.trim()
@@ -131,97 +149,125 @@ export default function OrderOpPublicMenuItemDetailPage() {
         </Button>
       </Group>
 
-      <Stack gap="lg">
-        <Paper withBorder radius="md" p={0} style={{ overflow: "hidden" }}>
-          {banner ? (
-            <Image src={banner} alt={displayName} h={220} fit="cover" />
-          ) : (
-            <Box
-              h={220}
-              style={{
-                background: "var(--mantine-color-gray-1)",
-                borderBottom: "1px solid var(--mantine-color-gray-3)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Stack gap={6} align="center">
-                <IconPhoto size={28} style={{ opacity: 0.6 }} />
-                <Text size="sm" c="dimmed">
-                  No image yet
-                </Text>
-              </Stack>
+      <SimpleGrid cols={{ base: 1, md: 2 }} spacing="lg">
+        <Stack gap="lg">
+          <Paper withBorder radius="md" p={0} style={{ overflow: "hidden" }}>
+            {banner ? (
+              <Image src={banner} alt={displayName} h={220} fit="cover" />
+            ) : (
+              <Box
+                h={220}
+                style={{
+                  background: "var(--mantine-color-gray-1)",
+                  borderBottom: "1px solid var(--mantine-color-gray-3)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Stack gap={6} align="center">
+                  <IconPhoto size={28} style={{ opacity: 0.6 }} />
+                  <Text size="sm" c="dimmed">
+                    No image yet
+                  </Text>
+                </Stack>
+              </Box>
+            )}
+
+            <Box p="md">
+              <Title order={3}>{displayName}</Title>
+              <Text size="sm" c="dimmed">
+                {item.restaurant_name || "-"} • {item.category || "-"} {item.protein_type ? `• ${item.protein_type}` : ""}
+              </Text>
             </Box>
-          )}
+          </Paper>
 
-          <Box p="md">
-            <Title order={3}>{displayName}</Title>
-            <Text size="sm" c="dimmed">
-              {item.restaurant_name || "-"} • {item.category || "-"} {item.protein_type ? `• ${item.protein_type}` : ""}
-            </Text>
-          </Box>
-        </Paper>
-
-        <Card withBorder radius="md">
-          <Group justify="space-between" mb="sm">
-            <Title order={4}>Imagery</Title>
-            <Button size="xs" variant="light" loading={generateImageMutation.isPending} onClick={() => generateImageMutation.mutate()}>
-              Generate with AI
-            </Button>
-          </Group>
-
-          <Group justify="space-between" align="center" wrap="wrap">
-            <Button
-              variant="default"
-              onClick={() => {
-                setImageUrl(item.menu_item_image ?? "");
-                setImageLinkOpened(true);
-              }}
-            >
-              Add / Edit image link
-            </Button>
-            <Button variant="default" onClick={() => updateMutation.mutate({ menu_item_image: null })} disabled={updateMutation.isPending}>
-              Clear image
-            </Button>
-          </Group>
-        </Card>
-
-        <Card withBorder radius="md">
-          <Group justify="space-between" mb="sm">
-            <Title order={4}>Item info</Title>
-            <Button
-              size="xs"
-              onClick={() => {
-                const price = form.price.trim() ? Number(form.price.trim()) : null;
-                updateMutation.mutate({
-                  name: form.name.trim() || null,
-                  description: form.description.trim() || null,
-                  category: form.category.trim() || null,
-                  protein_type: form.protein_type.trim() || null,
-                  price: price != null && Number.isFinite(price) ? price : null,
-                  ingredients: form.ingredients.trim() || null,
-                });
-              }}
-              loading={updateMutation.isPending}
-              disabled={!hasUnsavedChanges}
-            >
-              Save
-            </Button>
-          </Group>
-
-          <Stack gap="sm">
-            <TextInput label="Name" required value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.currentTarget.value }))} />
-            <Textarea label="Description" value={form.description} onChange={(e) => setForm((p) => ({ ...p, description: e.currentTarget.value }))} autosize minRows={4} />
-            <Group grow>
-              <TextInput label="Category" value={form.category} onChange={(e) => setForm((p) => ({ ...p, category: e.currentTarget.value }))} />
-              <TextInput label="Protein type" value={form.protein_type} onChange={(e) => setForm((p) => ({ ...p, protein_type: e.currentTarget.value }))} />
+          <Card withBorder radius="md">
+            <Group justify="space-between" mb="sm">
+              <Title order={4}>Imagery</Title>
+              <Button size="xs" variant="light" loading={generateImageMutation.isPending} onClick={() => generateImageMutation.mutate()}>
+                Generate with AI
+              </Button>
             </Group>
-            <TextInput label="Price" placeholder="12.50" value={form.price} onChange={(e) => setForm((p) => ({ ...p, price: e.currentTarget.value }))} />
-            <Textarea label="Ingredients" value={form.ingredients} onChange={(e) => setForm((p) => ({ ...p, ingredients: e.currentTarget.value }))} autosize minRows={3} />
-          </Stack>
+
+            <Group justify="space-between" align="center" wrap="wrap">
+              <Button
+                variant="default"
+                onClick={() => {
+                  setImageUrl(item.menu_item_image ?? "");
+                  setImageLinkOpened(true);
+                }}
+              >
+                Add / Edit image link
+              </Button>
+              <Button variant="default" onClick={() => updateMutation.mutate({ menu_item_image: null })} disabled={updateMutation.isPending}>
+                Clear image
+              </Button>
+            </Group>
+          </Card>
+
+          <Card withBorder radius="md">
+            <Group justify="space-between" mb="sm">
+              <Title order={4}>Item info</Title>
+              <Button
+                size="xs"
+                onClick={() => {
+                  const price = form.price.trim() ? Number(form.price.trim()) : null;
+                  updateMutation.mutate({
+                    name: form.name.trim() || null,
+                    description: form.description.trim() || null,
+                    category: form.category.trim() || null,
+                    protein_type: form.protein_type.trim() || null,
+                    price: price != null && Number.isFinite(price) ? price : null,
+                    ingredients: form.ingredients.trim() || null,
+                  });
+                }}
+                loading={updateMutation.isPending}
+                disabled={!hasUnsavedChanges}
+              >
+                Save
+              </Button>
+            </Group>
+
+            <Stack gap="sm">
+              <TextInput label="Name" required value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.currentTarget.value }))} />
+              <Textarea label="Description" value={form.description} onChange={(e) => setForm((p) => ({ ...p, description: e.currentTarget.value }))} autosize minRows={4} />
+              <Group grow>
+                <TextInput label="Category" value={form.category} onChange={(e) => setForm((p) => ({ ...p, category: e.currentTarget.value }))} />
+                <TextInput label="Protein type" value={form.protein_type} onChange={(e) => setForm((p) => ({ ...p, protein_type: e.currentTarget.value }))} />
+              </Group>
+              <TextInput label="Price" placeholder="12.50" value={form.price} onChange={(e) => setForm((p) => ({ ...p, price: e.currentTarget.value }))} />
+              <Textarea label="Ingredients" value={form.ingredients} onChange={(e) => setForm((p) => ({ ...p, ingredients: e.currentTarget.value }))} autosize minRows={3} />
+            </Stack>
+          </Card>
+        </Stack>
+
+        <Card withBorder radius="md">
+          <Title order={4} mb="xs">
+            Restaurant Name
+          </Title>
+          {restaurant ? (
+            <Stack gap="xs">
+              <Text fw={600}>{restaurant.restaurant_name || restaurant.name}</Text>
+              {restaurant.website_url && (
+                <Text size="xs" c="dimmed">
+                  {restaurant.website_url}
+                </Text>
+              )}
+              <Text size="xs" c="dimmed">
+                {restaurant.cuisine_type || "-"}
+              </Text>
+              <Text size="xs" c="dimmed">
+                {restaurant.location || "-"}
+              </Text>
+            </Stack>
+          ) : (
+            <Text size="sm" c="dimmed">
+              Loading restaurant…
+            </Text>
+          )}
         </Card>
-      </Stack>
+      </SimpleGrid>
 
       <Modal opened={imageLinkOpened} onClose={() => setImageLinkOpened(false)} title="Image link" centered>
         <Stack gap="sm">
