@@ -359,7 +359,7 @@ export default function MenuProfileMenuItemDetailPage() {
         <Stack gap="sm">
           <TextInput
             label="Image URL"
-            placeholder="http://orderop.com/storage/images/..."
+            placeholder="http://orderop.com/api/v1/media/..."
             value={imageUrl}
             onChange={(e) => setImageUrl(e.currentTarget.value)}
           />

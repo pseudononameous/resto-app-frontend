@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { crudApi, orderOpUploadApi } from "@services/api";
-import { Box, Card, Group, Image, Loader, Table, Text, Title, Badge, FileInput, Button, TextInput } from "@mantine/core";
-import { IconUpload } from "@tabler/icons-react";
+import { ActionIcon, Box, Button, Card, FileInput, Group, Image, Loader, Modal, SimpleGrid, Stack, Text, Title, Badge, TextInput } from "@mantine/core";
+import { IconTrash, IconUpload } from "@tabler/icons-react";
 
 type GeneratedImage = {
   id: number;
@@ -32,6 +32,8 @@ export default function MenuProfileGeneratedImagesPage() {
   const { id } = useParams<{ id: string }>();
   const restaurantId = Number(id);
   const queryClient = useQueryClient();
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState("");
   const [name, setName] = useState("");
@@ -85,6 +87,20 @@ export default function MenuProfileGeneratedImagesPage() {
       setName("");
       setImageType("");
       queryClient.invalidateQueries({ queryKey: ["generated-images", restaurantId] });
+      setIsCreateModalOpen(false);
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (imageId: number) => {
+      await crudApi.generatedImages.delete(imageId);
+    },
+    onSuccess: () => {
+      setDeletingId(null);
+      queryClient.invalidateQueries({ queryKey: ["generated-images", restaurantId] });
+    },
+    onError: () => {
+      setDeletingId(null);
     },
   });
 
@@ -121,10 +137,33 @@ export default function MenuProfileGeneratedImagesPage() {
       )}
 
       <Card withBorder radius="md" mb="md">
-        <Text fw={600} mb="xs">
-          Add image
-        </Text>
-        <Group align="flex-end" mb="sm">
+        <Group justify="space-between" align="center">
+          <Text fw={600}>Images</Text>
+          <Button
+            variant="light"
+            onClick={() => {
+              setFile(null);
+              setImageUrl("");
+              setName("");
+              setImageType("");
+              setIsCreateModalOpen(true);
+            }}
+          >
+            Add image
+          </Button>
+        </Group>
+      </Card>
+
+      <Modal
+        opened={isCreateModalOpen}
+        onClose={() => {
+          if (uploadMutation.isPending || createMutation.isPending) return;
+          setIsCreateModalOpen(false);
+        }}
+        title="Add image"
+        centered
+      >
+        <Stack gap="md">
           <FileInput
             placeholder="Upload image"
             accept="image/*"
@@ -132,40 +171,37 @@ export default function MenuProfileGeneratedImagesPage() {
             onChange={setFile}
             leftSection={<IconUpload size={16} />}
           />
-          <Button
-            variant="light"
-            leftSection={<IconUpload size={16} />}
-            onClick={() => uploadMutation.mutate()}
-            disabled={!file || uploadMutation.isPending}
-          >
-            {uploadMutation.isPending ? "Uploading..." : "Upload"}
-          </Button>
-          <TextInput
-            label="Image URL"
-            placeholder="https://..."
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.currentTarget.value)}
-            style={{ flex: 1 }}
-          />
-        </Group>
-        <Group align="flex-end">
-          <TextInput
-            label="Name"
-            placeholder="Interior hero image"
-            value={name}
-            onChange={(e) => setName(e.currentTarget.value)}
-          />
-          <TextInput
-            label="Type"
-            placeholder="dish / interior / branding"
-            value={imageType}
-            onChange={(e) => setImageType(e.currentTarget.value)}
-          />
-          <Button onClick={() => createMutation.mutate()} disabled={createMutation.isPending}>
-            {createMutation.isPending ? "Saving..." : "Save image"}
-          </Button>
-        </Group>
-      </Card>
+
+          <Group align="flex-end">
+            <Button
+              variant="light"
+              leftSection={<IconUpload size={16} />}
+              onClick={() => uploadMutation.mutate()}
+              disabled={!file || uploadMutation.isPending}
+            >
+              {uploadMutation.isPending ? "Uploading..." : "Upload"}
+            </Button>
+            <TextInput
+              label="Image URL"
+              placeholder="https://..."
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.currentTarget.value)}
+              style={{ flex: 1 }}
+            />
+          </Group>
+
+          <Group grow align="flex-end">
+            <TextInput label="Name" placeholder="Interior hero image" value={name} onChange={(e) => setName(e.currentTarget.value)} />
+            <TextInput label="Type" placeholder="dish / interior / branding" value={imageType} onChange={(e) => setImageType(e.currentTarget.value)} />
+          </Group>
+
+          <Group justify="flex-end">
+            <Button onClick={() => createMutation.mutate()} disabled={createMutation.isPending}>
+              {createMutation.isPending ? "Saving..." : "Save image"}
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
 
       <Card withBorder radius="md">
         {isLoading || !data ? (
@@ -177,63 +213,82 @@ export default function MenuProfileGeneratedImagesPage() {
             No generated images yet for this restaurant.
           </Text>
         ) : (
-          <Table striped withTableBorder withColumnBorders>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>ID</Table.Th>
-                <Table.Th>Preview</Table.Th>
-                <Table.Th>Name</Table.Th>
-                <Table.Th>Type</Table.Th>
-                <Table.Th>Size</Table.Th>
-                <Table.Th>Format</Table.Th>
-                <Table.Th>Tags</Table.Th>
-                <Table.Th>Created</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {data.map((row) => (
-                <Table.Tr key={row.id}>
-                  <Table.Td>{row.id}</Table.Td>
-                  <Table.Td>
-                    {row.image_url ? (
-                      <Image src={row.image_url} alt={row.name ?? ""} w={80} radius="sm" />
-                    ) : (
-                      <Text size="xs" c="dimmed">
-                        -
-                      </Text>
-                    )}
-                  </Table.Td>
-                  <Table.Td>
-                    <Text size="sm" lineClamp={2}>
-                      {row.name || "-"}
+          <SimpleGrid cols={{ base: 1, md: 2, lg: 3 }} spacing="md">
+            {data.map((row) => (
+              <Card key={row.id} withBorder radius="md" p="sm">
+                <Group justify="space-between" align="flex-start" mb="xs">
+                  <Text size="xs" c="dimmed">
+                    #{row.id}
+                  </Text>
+                  <ActionIcon
+                    color="red"
+                    variant="subtle"
+                    radius="md"
+                    aria-label="Delete image"
+                    loading={deletingId === row.id}
+                    disabled={deleteMutation.isPending}
+                    onClick={() => {
+                      const ok = window.confirm("Delete this image? This will also remove the stored file.");
+                      if (!ok) return;
+                      setDeletingId(row.id);
+                      deleteMutation.mutate(row.id);
+                    }}
+                  >
+                    <IconTrash size={16} />
+                  </ActionIcon>
+                </Group>
+
+                <Box
+                  style={{
+                    height: 160,
+                    borderRadius: 8,
+                    overflow: "hidden",
+                    background: "var(--mantine-color-gray-1)",
+                    border: "1px solid var(--mantine-color-gray-3)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {row.image_url ? (
+                    <Image src={row.image_url} alt={row.name ?? ""} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  ) : (
+                    <Text size="sm" c="dimmed">
+                      No preview
                     </Text>
-                  </Table.Td>
-                  <Table.Td>{row.image_type || "-"}</Table.Td>
-                  <Table.Td>
-                    <Text size="xs">
-                      {row.width && row.height ? `${row.width}×${row.height}` : "-"}
-                      {row.file_size ? ` • ${(row.file_size / 1024).toFixed(1)} KB` : ""}
-                    </Text>
-                  </Table.Td>
-                  <Table.Td>{row.format || "-"}</Table.Td>
-                  <Table.Td>
-                    <Group gap={4}>
+                  )}
+                </Box>
+
+                <Stack mt="sm" gap={6}>
+                  <Text fw={600} lineClamp={2}>
+                    {row.name || "-"}
+                  </Text>
+                  <Text size="xs" c="dimmed">
+                    {row.image_type || "-"}
+                  </Text>
+
+                  <Text size="xs">
+                    {row.width && row.height ? `${row.width}×${row.height}` : "-"}
+                    {row.file_size ? ` • ${(row.file_size / 1024).toFixed(1)} KB` : ""}
+                  </Text>
+
+                  <Text size="xs" c="dimmed">
+                    {row.format || "-"} • {row.created_at ? new Date(row.created_at).toLocaleString() : "-"}
+                  </Text>
+
+                  {(row.tags ?? []).length > 0 ? (
+                    <Group gap={6}>
                       {(row.tags ?? []).map((tag) => (
                         <Badge key={tag} size="xs" variant="light">
                           {tag}
                         </Badge>
                       ))}
                     </Group>
-                  </Table.Td>
-                  <Table.Td>
-                    <Text size="xs" c="dimmed">
-                      {row.created_at ? new Date(row.created_at).toLocaleString() : "-"}
-                    </Text>
-                  </Table.Td>
-                </Table.Tr>
-              ))}
-            </Table.Tbody>
-          </Table>
+                  ) : null}
+                </Stack>
+              </Card>
+            ))}
+          </SimpleGrid>
         )}
       </Card>
     </Box>

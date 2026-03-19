@@ -115,6 +115,14 @@ export default function MenuProfileMenuListPage() {
               )}
             </Box>
             <Box ta="right">
+              <Button
+                variant="light"
+                size="xs"
+                mb="xs"
+                onClick={() => navigate(`/dashboard/orderop-manual-ai/generated-images/${restaurantId}`)}
+              >
+                Banners
+              </Button>
               <Text size="xs" c="dimmed">
                 {restaurant.cuisine_type || '-'}
               </Text>
