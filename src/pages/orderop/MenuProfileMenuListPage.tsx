@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { crudApi } from "@services/api";
-import { Box, Button, Card, FileInput, Group, Loader, Table, Text, Title } from "@mantine/core";
+import { Anchor, Box, Button, Card, FileInput, Group, Image, Loader, Stack, Table, Text, Title } from "@mantine/core";
 import { IconUpload } from "@tabler/icons-react";
 
 type MenuItemRow = {
@@ -14,6 +14,7 @@ type MenuItemRow = {
   protein_type: string | null;
   price: number | null;
   ingredients: string | null;
+  menu_item_image?: string | null;
   created_at: string;
 };
 
@@ -37,6 +38,7 @@ type Restaurant = {
 };
 
 export default function MenuProfileMenuListPage() {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const restaurantId = Number(id);
   const queryClient = useQueryClient();
@@ -210,6 +212,7 @@ export default function MenuProfileMenuListPage() {
           <Table striped withTableBorder withColumnBorders>
             <Table.Thead>
               <Table.Tr>
+                <Table.Th>Image</Table.Th>
                 <Table.Th>Menu item</Table.Th>
                 <Table.Th>Description</Table.Th>
                 <Table.Th>Category</Table.Th>
@@ -222,7 +225,39 @@ export default function MenuProfileMenuListPage() {
             <Table.Tbody>
               {rows.map((row) => (
                 <Table.Tr key={row.id}>
-                  <Table.Td>{row.name || "-"}</Table.Td>
+                  <Table.Td>
+                    {row.menu_item_image ? (
+                      <Image src={row.menu_item_image} alt={row.name ?? ""} w={72} h={72} radius="sm" fit="cover" />
+                    ) : (
+                      <Stack gap={6} align="center">
+                        <Box
+                          w={72}
+                          h={72}
+                          style={{
+                            borderRadius: 8,
+                            background: "var(--mantine-color-gray-1)",
+                            border: "1px solid var(--mantine-color-gray-3)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <Text size="xs" c="dimmed">
+                            No image
+                          </Text>
+                        </Box>
+                      </Stack>
+                    )}
+                  </Table.Td>
+                  <Table.Td>
+                    <Anchor
+                      size="sm"
+                      fw={600}
+                      onClick={() => navigate(`/dashboard/orderop-manual-ai/menu/${restaurantId}/item/${row.id}`)}
+                    >
+                      {row.name || `Menu item #${row.id}`}
+                    </Anchor>
+                  </Table.Td>
                   <Table.Td><Text size="sm" lineClamp={3}>{row.description || "-"}</Text></Table.Td>
                   <Table.Td>{row.category || "-"}</Table.Td>
                   <Table.Td>{row.protein_type || "-"}</Table.Td>

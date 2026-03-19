@@ -79,6 +79,8 @@ export const crudApi = {
       axios.post(`/v1/restaurants/${restaurantId}/menu/import`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       }),
+    generateImage: (menuProfileId: number) =>
+      axios.post(`/v1/menu-profiles/${menuProfileId}/generate-image`),
   },
   generatedImages: base('generated-images'),
   designAssets: base('design-assets'),
@@ -133,4 +135,18 @@ export const orderOpUploadApi = {
 export const orderOpPublicApi = {
   createRestaurantFromWebsite: (payload: { website_url: string; name?: string }) =>
     axios.post('/v1/orderop/restaurants', payload),
+  getRestaurant: (restaurantId: number) =>
+    axios.get<{ success: boolean; data: Record<string, any> }>(`/v1/orderop/restaurants/${restaurantId}`),
+  updateRestaurantProfileFromJson: (restaurantId: number, payload: { output: Record<string, any> } | Array<{ output: Record<string, any> }>) =>
+    axios.patch(`/v1/orderop/restaurants/${restaurantId}`, payload),
+  listMenuProfilesByRestaurant: (restaurantId: number, params?: Record<string, unknown>) =>
+    axios.get(`/v1/orderop/restaurants/${restaurantId}/menu`, { params }),
+  getMenuProfile: (menuProfileId: number) =>
+    axios.get(`/v1/orderop/menu-profiles/${menuProfileId}`),
+  updateMenuProfile: (menuProfileId: number, data: object) =>
+    axios.put(`/v1/orderop/menu-profiles/${menuProfileId}`, data),
+  deleteMenuProfile: (menuProfileId: number) =>
+    axios.delete(`/v1/orderop/menu-profiles/${menuProfileId}`),
+  generateMenuProfileImage: (menuProfileId: number) =>
+    axios.post(`/v1/orderop/menu-profiles/${menuProfileId}/generate-image`),
 };
