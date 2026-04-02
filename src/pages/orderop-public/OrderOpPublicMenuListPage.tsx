@@ -14,7 +14,7 @@ const isProbablyDomain = (value: string) => {
 const menuItemDisplayName = (row: MenuItemRow) => {
   const rawName =
     row.raw_payload?.name ??
-    row.raw_payload?.["menu name"] ??
+    row.raw_payload?.["menu_name"] ??
     row.raw_payload?.["\ufeffname"];
   if (row.name && isProbablyDomain(row.name) && typeof rawName === "string" && rawName.trim()) {
     return rawName.trim();
